@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,16 +25,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [PostController::class, 'index'])->name('post.index');
     Route::get('/my-posts', [PostController::class, 'userIndex'])->name('post.user.index');
     Route::get('/posts/create', [PostController::class, 'create'])->name('post.create');
-    Route::post('/posts/create', [PostController::class, 'store'])->name('post.store');
+    Route::post('/posts/store', [PostController::class, 'store'])->name('post.store');
     Route::get('/posts/edit/{post}', [PostController::class, 'edit'])->name('post.edit');
-    Route::put('/posts/edit/{post}', [PostController::class, 'update'])->name('post.update');
+    Route::put('/posts/update/{post}', [PostController::class, 'update'])->name('post.update');
     Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->name('post.destroy');
     Route::get('/posts/details/{post}', [PostController::class, 'show'])->name('post.show');
-    Route::post('/categories/create', [CategoryController::class, 'store'])->name('category.store');
     
-    Route::post('/comments/create/{post}', [CommentController::class, 'store'])->name('comment.store');
+    Route::any('/categories/store', [CategoryController::class, 'store'])->name('category.store');
+    Route::any('/tags/store', [TagController::class, 'store'])->name('tag.store');
+    
+    Route::post('/comments/store/{post}', [CommentController::class, 'store'])->name('comment.store');
     Route::get('/comments/edit/{comment}', [CommentController::class, 'edit'])->name('comment.edit');
-    Route::put('/comments/edit/{comment}', [CommentController::class, 'update'])->name('comment.update');
+    Route::put('/comments/update/{comment}', [CommentController::class, 'update'])->name('comment.update');
     Route::delete('/comments/delete/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');

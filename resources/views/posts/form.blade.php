@@ -26,32 +26,47 @@
                 <img class="preview" src="{{ asset('storage/previews/' . $post->preview) }}" alt="Preview"> <br>
             @endisset
             <input type="file" name="preview" accept="image/*"> <br> <br>
-        </label>
-        <fieldset>
-            <legend>
-                <strong>Select category</strong> 
-            </legend>
-            @foreach($categories as $category)
-                <label>
-                    <input type="radio" name="category" value="{{ $category->name }}" 
-                    {{ isset($post) && $post->category->name == $category->name  ||  old('category') == $category->name ? 'checked' : '' }}>
-                    {{ $category->name }} <br>
-                </label>
-            @endforeach
-        </fieldset>
+        </label> <br>
+        <label>
+            Category <br> 
+            <select name="category">
+                <option value="">Select category</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->name }}" {{ isset($post) && $post->category->name == $category->name  ||  old('category') == $category->name ? 'selected' : '' }}>{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </label> <br>
         @error('category')
             <div style="color: red; font-size: 20px; margin-bottom: 20px" >{{ $message }}</div>
         @enderror
-        <div class="add-post-category">
-            <button class="button-post" type="submit">{{ isset($post) ? 'Update' : 'Create' }}</button>
-            </form>
-            <form action="{{ route('category.store') }}" method="POST">
-                @csrf
-                <input type="text" name="name" placeholder="Add a new category">
-                <button class="add-category" type="submit">Add</button>
-            </form>
+        <div class="new-category-tag">
+            <input type="text" name="category_name" placeholder="Add a new category">
+            <button formaction="{{ route('category.store') }}" class="add-category" type="submit" value="category" name="submit">Add</button>
+            @error('category_name')
+                <div style="color: red; font-size: 20px" >{{ $message }}</div>
+            @enderror
         </div>
-        @error('name')
-            <div style="color: red; font-size: 20px; margin-left: 250px" >{{ $message }}</div>
+        <label>
+            Tags <br> 
+            <select name="tags[]" multiple>
+                @foreach($tags as $tag)
+                    <option value="{{ $tag->id }}" 
+                    {{ isset($post) && in_array($tag->name, $post->tags->pluck('name')->toArray())  || in_array($tag->id, old('tags', [])) ? 'selected' : '' }}>
+                        {{ $tag->name }}
+                    </option>
+                @endforeach
+            </select>
+        </label>
+        @error('tags')
+            <div style="color: red; font-size: 20px; margin-bottom: 20px" >{{ $message }}</div>
         @enderror
+        <div class="new-category-tag">
+            <input type="text" name="tag_name" placeholder="Add a new tag">
+            <button formaction="{{ route('tag.store') }}" class="add-tag" type="submit" value="tag" name="sumbit">Add</button>
+            @error('tag_name')
+                <div style="color: red; font-size: 20px" >{{ $message }}</div>
+            @enderror        
+        </div>
+        <button class="button-post" type="submit" value="post" name="submit">{{ isset($post) ? 'Update' : 'Create' }}</button>
+    </form>
 @endsection

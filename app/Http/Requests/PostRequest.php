@@ -21,11 +21,31 @@ class PostRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'title' => ['required', 'string'],
-            'content' => ['required', 'string'],
-            'preview' => ['nullable', 'file'],
-            'category' => ['required', 'string'],
-        ];
+        if($this->submit == 'post') {
+            return [
+                'title' => ['required', 'string'],
+                'content' => ['required', 'string'],
+                'preview' => ['nullable', 'file'],
+                'category' => ['required', 'string'],
+                'tags' => ['nullable', 'array'],
+            ];  
+        } elseif($this->submit == 'category') {
+            return [
+                'category_name' => ['required', 'string'],
+            ];
+        } else {
+            return [
+                'tag_name' => ['required', 'string'],
+            ];
+        }
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if(isset($this->tag_name) && $this->tag_name[0] != '#') {
+            $this->merge([
+                'tag_name' => '#' . $this->tag_name,
+            ]);
+        }
     }
 }

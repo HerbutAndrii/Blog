@@ -5,7 +5,7 @@
         @csrf
         <h2>Log in</h2>
         @error('Login')
-            <div style="color: red; font-size: 20px; text-align: center" >{{ $message }}</div>
+            <div style="color: red; font-size: 20px; text-align: center; margin-bottom: 20px" >{{ $message }}</div>
         @enderror
         <label>
             Password <br>

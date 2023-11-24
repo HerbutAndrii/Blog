@@ -21,7 +21,7 @@ class AuthController extends Controller
             return redirect(route('post.index'));
         } else {
             return back()->withErrors([
-                'Login' => 'Such user does not exist'
+                'Login' => 'Passwords or email addresses do not match'
             ])->withInput();
         }
     }
@@ -41,7 +41,8 @@ class AuthController extends Controller
             $request->file('avatar')->storeAs('public/avatars', $fileName);
             $user->avatar = $fileName;
         } else {
-            Storage::put('public/avatars/default-avatar.jpg', Storage::get('/public/layouts/default-avatar.jpg'));
+            Storage::put('public/avatars/default-avatar.jpg', 
+                    Storage::get('/public/layouts/default-avatar.jpg'));
         }
 
         $user->save();

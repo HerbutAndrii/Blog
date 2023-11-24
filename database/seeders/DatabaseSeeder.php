@@ -4,10 +4,13 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,9 +19,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(3)->create()->each(function ($user) {
-            Post::factory(20)->create(['user_id' => $user->id])->each(function ($post) {
-                Comment::factory(5)->create(['user_id' => $post->user->id, 'post_id' => $post->id]);
+        Category::factory(3)->create();
+
+        User::factory(3)
+            ->create()
+            ->each(function ($user) {
+
+            Storage::put('public/avatars/default-avatar.jpg', Storage::get('/public/layouts/default-avatar.jpg'));
+
+            Post::factory(20)
+                ->has(Tag::factory(rand(1,3)))
+                ->create(['user_id' => $user->id, 'category_id' => rand(1,3)])
+                ->each(function ($post) {
+                    
+                Storage::put('public/previews/default-preview.avif', Storage::get('/public/layouts/default-preview.avif'));
+
+                Comment::factory(5)
+                ->create(['user_id' => rand(1, $post->user->id), 'post_id' => $post->id]);
             });
         });
 

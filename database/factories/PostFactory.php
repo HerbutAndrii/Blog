@@ -17,9 +17,10 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->title(),
-            'content' => fake()->sentence(50),
+            'title' => ucfirst(fake()->words(3, true)),
+            'content' => fake()->sentences(10, true),
             'preview' => 'default-preview.avif',
+            'category_id' => 1,
         ];
     }
 }

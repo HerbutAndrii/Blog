@@ -11,7 +11,7 @@ class Post extends Model
 
     protected $table = 'posts';
 
-    protected $fillable = ['title', 'content'];
+    protected $fillable = ['title', 'content', 'category_id', 'user_id'];
 
     public function user() {
         return $this->belongsTo(User::class);
@@ -23,5 +23,9 @@ class Post extends Model
 
     public function category() {
         return $this->belongsTo(Category::class);
+    }
+
+    public function tags() {
+        return $this->belongsToMany(Tag::class);
     }
 }

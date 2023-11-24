@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\Tag;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,7 +25,8 @@ class PostController extends Controller
 
     public function show(Post $post) {
         $date = Carbon::parse($post->updated_at);
-        $relatedPosts = Post::orderByDesc('updated_at')
+        $relatedPosts = Post::with('tags')
+                        ->orderByDesc('updated_at')
                         ->where('category_id', $post->category_id)
                         ->where('id', '!=', $post->id)
                         ->take(3)
@@ -34,7 +36,8 @@ class PostController extends Controller
 
     public function create() {
         $categories = Category::all();
-        return view('posts.form', compact('categories'));
+        $tags = Tag::all();
+        return view('posts.form', compact('categories', 'tags'));
     }
 
     public function store(PostRequest $request) {
@@ -54,12 +57,18 @@ class PostController extends Controller
         }
 
         $post->save();
+
+        if($request->has('tags')) {
+            $post->tags()->attach($request->tags);
+        }
+
         return redirect(route('post.user.index'));
     }
 
     public function edit(Post $post) {
         $categories = Category::all();
-        return view('posts.form', compact('post', 'categories'));
+        $tags = Tag::all();
+        return view('posts.form', compact('post', 'categories', 'tags'));
     }
 
     public function update(PostRequest $request, Post $post) {
@@ -70,16 +79,25 @@ class PostController extends Controller
         
         if($request->hasFile('preview')) {
             $fileName = $request->file('preview')->getClientOriginalName();
-            $request->file('preview')->storeAs('public/previews', 'Post' . $post->id);
+            $request->file('preview')->storeAs('public/previews', $fileName);
             $post->preview = $fileName;
+        } else {
+            Storage::put('public/previews/default-preview.avif', 
+                    Storage::get('/public/layouts/default-preview.avif'));
+        }
+
+        $post->save();
+
+        if($request->has('tags')) {
+            $post->tags()->attach($request->tags);
         }
         
-        $post->save();
         return redirect(route('post.user.index'));
     } 
 
     public function destroy(Post $post) {
         $post->comments()->delete();
+        $post->tags()->detach();
         $post->delete();
         return redirect(route('post.user.index'));
     }
