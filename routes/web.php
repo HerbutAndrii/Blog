@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/posts/update/{post}', [PostController::class, 'update'])->name('post.update');
     Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->name('post.destroy');
     Route::get('/posts/details/{post}', [PostController::class, 'show'])->name('post.show');
-    
+   
+    Route::post('/posts/like/{post}', [LikeController::class, 'like'])->name('post.like');
+    Route::delete('/posts/unlike/{post}', [LikeController::class, 'unlike'])->name('post.unlike');
+
     Route::any('/categories/store', [CategoryController::class, 'store'])->name('category.store');
     Route::any('/tags/store', [TagController::class, 'store'])->name('tag.store');
     
@@ -38,6 +42,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/comments/edit/{comment}', [CommentController::class, 'edit'])->name('comment.edit');
     Route::put('/comments/update/{comment}', [CommentController::class, 'update'])->name('comment.update');
     Route::delete('/comments/delete/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
+
+    Route::get('/tags/show/{tag}', [TagController::class, 'show'])->name('tag.show');
+    
+    Route::get('/categories/show/{category}', [CategoryController::class, 'show'])->name('category.show');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 });

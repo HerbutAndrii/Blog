@@ -15,7 +15,7 @@
         @enderror
         <label>
             Content <br>
-            <textarea name="content" rows="5" cols="33">{{ old('content', isset($post) ? $post->content : '') }}</textarea> <br>
+            <textarea name="content" rows="8" cols="33" placeholder="Write some content...">{{ old('content', isset($post) ? $post->content : '') }}</textarea> <br>
         </label>
         @error('content')
             <div style="color: red; font-size: 20px; margin-bottom: 20px" >{{ $message }}</div>
@@ -32,7 +32,9 @@
             <select name="category">
                 <option value="">Select category</option>
                 @foreach($categories as $category)
-                    <option value="{{ $category->name }}" {{ isset($post) && $post->category->name == $category->name  ||  old('category') == $category->name ? 'selected' : '' }}>{{ $category->name }}</option>
+                    <option value="{{ $category->name }}" {{ isset($post) && $post->category->name == $category->name  ||  old('category') == $category->name ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
                 @endforeach
             </select>
         </label> <br>

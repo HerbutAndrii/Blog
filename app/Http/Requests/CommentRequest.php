@@ -21,8 +21,22 @@ class CommentRequest extends FormRequest
      */
     public function rules(): array
     {
+        if($this->submit == 'commnet') {
+            return [
+                'content' => ['required', 'string'],
+            ];
+        } else {
+            return [
+                'edit_content' => ['required', 'string'],
+            ];
+        }
+    }
+
+    public function messages(): array
+    {
         return [
-            'content' => ['required', 'string'],
+            'edit_content.required' => 'The content field is required.',
+            'edit_content.string' => 'The content field must be a string.'
         ];
     }
 }

@@ -42,10 +42,16 @@ class PostRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if(isset($this->tag_name) && $this->tag_name[0] != '#') {
+        if(isset($this->tag_name)) {
             $this->merge([
-                'tag_name' => '#' . $this->tag_name,
+                'tag_name' => strtolower(str_replace(' ', '_', $this->tag_name))
             ]);
+
+            if($this->tag_name[0] != '#') {
+                $this->merge([
+                    'tag_name' => '#' . $this->tag_name
+                ]);
+            }
         }
     }
 }

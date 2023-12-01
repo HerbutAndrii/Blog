@@ -9,8 +9,6 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $table = 'posts';
-
     protected $fillable = ['title', 'content', 'category_id', 'user_id'];
 
     public function user() {
@@ -27,5 +25,9 @@ class Post extends Model
 
     public function tags() {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function likes() {
+        return $this->hasMany(Like::class);
     }
 }

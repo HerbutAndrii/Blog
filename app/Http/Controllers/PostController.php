@@ -12,49 +12,52 @@ use Illuminate\Support\Facades\Storage;
 class PostController extends Controller
 {
     public function index() {
-        $posts = Post::orderByDesc('updated_at')->paginate(6);
-        return view('posts.index', compact('posts'));
+        $posts = Post::with('category', 'likes')
+            ->orderByDesc('updated_at')
+            ->paginate(6);
+            
+        return view('posts.index', compact('posts'))
+            ->with('title', 'All posts');
     }
 
     public function userIndex() {
-        $posts = Post::orderByDesc('updated_at')
-                ->where('user_id', auth()->user()->id)
-                ->paginate(6);
-        return view('posts.index', compact('posts'));
+        $posts = Post::with('category', 'likes')
+            ->orderByDesc('updated_at')
+            ->where('user_id', auth()->user()->id)
+            ->paginate(6);
+
+        return view('posts.index', compact('posts'))
+            ->with('title', 'My posts');
     }
 
     public function show(Post $post) {
         $date = Carbon::parse($post->updated_at);
-        $relatedPosts = Post::with('tags')
+
+        $relatedPosts = $post->category->posts()
+                        ->with('user', 'category', 'tags', 'comments')
                         ->orderByDesc('updated_at')
-                        ->where('category_id', $post->category_id)
                         ->where('id', '!=', $post->id)
                         ->take(3)
                         ->get();
-        return view('posts.details', compact('post', 'date', 'relatedPosts'));
+
+        $like = $post->likes()->where('user_id', auth()->user()->id)->exists();
+
+        return view('posts.details', compact('post', 'date', 'relatedPosts', 'like'));
     }
 
     public function create() {
         $categories = Category::all();
         $tags = Tag::all();
+        
         return view('posts.form', compact('categories', 'tags'));
     }
 
     public function store(PostRequest $request) {
-        $post = new Post();
-        $post->fill($request->only('title', 'content'));
+        $post = new Post($request->only('title', 'content'));
         $post->user()->associate(auth()->user());
-        $category = Category::where('name', $request->category)->first();
-        $post->category()->associate($category);
+        $post->category()->associate(Category::firstOrCreate(['name' => $request->category]));
 
-        if($request->hasFile('preview')) {
-            $fileName = $request->file('preview')->getClientOriginalName();
-            $request->file('preview')->storeAs('public/previews', $fileName);
-            $post->preview = $fileName;
-        } else {
-            Storage::put('public/previews/default-preview.avif', 
-                    Storage::get('/public/layouts/default-preview.avif'));
-        }
+        $this->handlePreview($request, $post);
 
         $post->save();
 
@@ -68,28 +71,20 @@ class PostController extends Controller
     public function edit(Post $post) {
         $categories = Category::all();
         $tags = Tag::all();
+
         return view('posts.form', compact('post', 'categories', 'tags'));
     }
 
     public function update(PostRequest $request, Post $post) {
-        $post->title = $request->title;
-        $post->content = $request->content;
-        $category = Category::where('name', $request->category)->first();
-        $post->category()->associate($category);
+        $post->fill($request->only('title', 'content'));
+        $post->category()->associate(Category::firstOrCreate(['name' => $request->category]));
         
-        if($request->hasFile('preview')) {
-            $fileName = $request->file('preview')->getClientOriginalName();
-            $request->file('preview')->storeAs('public/previews', $fileName);
-            $post->preview = $fileName;
-        } else {
-            Storage::put('public/previews/default-preview.avif', 
-                    Storage::get('/public/layouts/default-preview.avif'));
-        }
+        $this->handlePreview($request, $post);
 
         $post->save();
 
         if($request->has('tags')) {
-            $post->tags()->attach($request->tags);
+            $post->tags()->sync($request->tags);
         }
         
         return redirect(route('post.user.index'));
@@ -99,6 +94,17 @@ class PostController extends Controller
         $post->comments()->delete();
         $post->tags()->detach();
         $post->delete();
+
         return redirect(route('post.user.index'));
+    }
+
+    private function handlePreview(PostRequest $request, Post $post) {
+        if($request->hasFile('preview')) {
+            $fileName = $request->file('preview')->getClientOriginalName();
+            $request->file('preview')->storeAs('public/previews', $fileName);
+            $post->preview = $fileName;
+        } else {
+            Storage::put('public/previews/default-preview.avif', Storage::get('/public/layouts/default-preview.avif'));
+        }
     }
 }

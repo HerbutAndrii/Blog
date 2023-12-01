@@ -3,21 +3,43 @@
 @include('header')
 @section('content')
     <h1 style="margin-bottom: 5px">{{ $post->title }}</h1> 
-    <h2 style="text-align: center; color: #7878bd">{{ $post->category->name }}</h2>
-    <h3 style="text-align: center; color: #555">{{ auth()->user()->name == $post->user->name ? 'You' : $post->user->name }}, {{ $date->format('F') }} {{ $date->day }}, {{ $date->year }}, {{ $date->format('H:i') }}</h3> <hr>
-    <img class="preview-details" src="{{ asset('storage/previews/' . $post->preview) }}" alt="Preview">
+    <h2 style="text-align: center;">
+        <a href="{{ route('category.show', $post->category) }}" style="text-decoration: none; color: #7878bd">
+            {{ $post->category->name }}
+        </a>
+    </h2>
+    <h3 style="text-align: center; color: #555">
+        {{ auth()->user()->name == $post->user->name ? 'You' : $post->user->name }} | {{ $date->year }} | {{ $date->format('F') }} {{ $date->day }} | {{ $date->format('H:i') }} | {{ $post->likes->count() }} likes
+    </h3> 
     <fieldset>
+        <img class="preview-details" src="{{ asset('storage/previews/' . $post->preview) }}" alt="Preview">
         <p style="text-align: center; font-size: 30px">{{ $post->content }}</p>
     </fieldset>
-    <div style="margin-bottom: 20px;">
-        <h2>Tags</h2>
-        <p>
-            @foreach($post->tags as $tag)
-                {{ $tag->name . ' '}} 
-            @endforeach
-        </p>
+    <div class="like">
+        @if(!$like)
+            <form action="{{ route('post.like', $post) }}" method="POST">
+                @csrf
+                <button class="button-like" type="submit">Like</button>
+            </form>
+        @else
+            <form action="{{ route('post.unlike', $post) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button class="button-like" type="submit">Unlike</button>
+            </form> 
+        @endif
     </div>
-    @if($post->user->name == auth()->user()->name)
+    <div class="tags">
+        <h2>Tags</h2>
+        @if(! $post->tags()->exists())
+            <div style="font-size: 30px">No tags</div>
+        @else
+            @foreach($post->tags as $tag)
+                <a href="{{ route('tag.show', $tag) }}">{{ $tag->name}}</a>
+            @endforeach
+        @endif
+    </div>
+    @if($post->user->id == auth()->user()->id)
         <div style="display: flex; height: 54px">
             <a class="link-edit" href="{{ route('post.edit', $post) }}">Edit post</a>
             <form action="{{ route('post.destroy', $post) }}" method="POST">
@@ -37,13 +59,13 @@
         @error('content')
             <div style="color: red; font-size: 20px; margin-bottom: 20px" >{{ $message }}</div>
         @enderror
-        <button class="button-comment" type="submit">Add</button>
+        <button class="button-comment" type="submit" value="commnet" name="submit">Add</button>
     </form>
     @if(! $post->comments()->exists())
         <h2 style="text-align: center;">There are no comments here yet</h2>
     @else
         @foreach($post->comments as $comment)
-            @if($comment->user->name == auth()->user()->name)
+            @if($comment->user->id == auth()->user()->id)
                 <div class="comment">
                     <img src="{{ asset('storage/avatars/' . $comment->user->avatar) }}" alt="avatar">
                     <h3>You</h3>
@@ -59,7 +81,7 @@
                         @error('edit_content')
                             <div style="color: red; font-size: 20px; margin-bottom: 20px" >{{ $message }}</div>
                         @enderror
-                        <button type="submit" class="button-comment">Update</button>
+                        <button type="submit" class="button-comment" value="edit_comment" name="submit">Update</button>
                     </form>
                 @else
                     <p>{{ $comment->content }}</p>
@@ -93,9 +115,12 @@
                     <div class="blog-card">
                         <img src="{{ asset('storage/previews/' . $post->preview) }}" alt="Preview">
                         <h2>{{ $post->title }}</h2>
-                        <h3>{{ $post->category->name }}</h3>
+                        <a href="{{ route('category.show', $post->category) }}" style="text-decoration: none">
+                            <h3>{{ $post->category->name }}</h3>
+                        </a>
+                        <h4>{{ $post->likes()->count() }} likes</h4>
                         <p>{{ strlen($post->content) > 200 ? substr($post->content, 0, 200) . '...' : $post->content }}</p>
-                        <a href="{{ route('post.show', $post) }}">Read more</a>
+                        <a class="details-link" href="{{ route('post.show', $post) }}">Read more</a>
                     </div>
                 @endforeach
             </div>
