@@ -3,8 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('auth/login', 'welcome')->name('welcome');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::get('/', [PostController::class, 'index'])->name('post.index');
     Route::get('/my-posts', [PostController::class, 'userIndex'])->name('post.user.index');
@@ -44,13 +46,28 @@ Route::middleware('auth')->group(function () {
     Route::delete('/comments/delete/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 
     Route::get('/tags/show/{tag}', [TagController::class, 'show'])->name('tag.show');
-    
     Route::get('/categories/show/{category}', [CategoryController::class, 'show'])->name('category.show');
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+    Route::post('/search', SearchController::class)->name('search');
 });
+
+Route::post('/logout', [AuthController::class, 'logout'])
+            ->middleware('auth')
+            ->name('auth.logout');
 
 Route::get('/login', [AuthController::class, 'loginView'])->name('auth.loginView');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('/register', [AuthController::class, 'registerView'])->name('auth.registerView');
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+
+Route::get('/email/verify', [EmailVerificationController::class , 'notice'])
+            ->middleware('auth')
+            ->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+            ->middleware(['auth', 'signed'])
+            ->name('verification.verify');
+            
+Route::post('/email/verification-notification', [EmailVerificationController::class, 'send'])
+            ->middleware(['auth', 'throttle:6,1'])
+            ->name('verification.send');

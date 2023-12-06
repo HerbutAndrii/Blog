@@ -86,11 +86,12 @@
   }
 
   .button-delete,
-  .button-like {
+  .button-like,
+  .button-resend {
     background-color: #b80220;
     color: #fff;
     display: inline-block;
-    width: 200px;
+    width: 205px;
     text-align: center;
     font-family: "Roboto";
     font-size: 20px;
@@ -100,6 +101,10 @@
     margin-bottom: 20px;
     text-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+
+  .button-resend {
+    width: 94%;
   }
 
   .button-like {
@@ -190,7 +195,7 @@
   .site-header {
     background-color: #fff; 
     color: #0a0a0a; 
-    padding: 20px; 
+    padding: 15px; 
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -218,7 +223,8 @@
   .main-menu ul {
     list-style: none;
     text-align: center;
-    padding: 0;
+    /* padding: 15px 0 0 0; */
+    padding-top: 10px;
     margin: 0;
     display: flex;
   }
@@ -230,16 +236,27 @@
   .header-links {
     display: flex; 
     margin-top: 30px;
-    padding: 10px 20px;
-    margin-bottom: 30px;
+    padding: 15px 20px;
+    /* margin-bottom: 30px; */
     margin: 5px; 
-    border-radius: 5px;
+    /* border-radius: 5px; */
   }
   
   .main-menu a {
     text-decoration: none; 
     color: #0a0a0a;
     font-size: 1.5em;
+  }
+
+  .search input {
+    background-color: #eaeff1;
+    width: 350px;
+    font-size: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    border-radius: 30px;
+    margin-right: 50px;
+    /* text-align: center; */
   }
 
   .logout {
@@ -251,6 +268,7 @@
     font-family: "Roboto";
     font-weight: 900;
     padding: 10px 20px;
+    margin-top: 8px;
     border: none;
     border-radius: 30px;
     text-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;

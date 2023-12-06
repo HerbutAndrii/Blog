@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -19,7 +20,7 @@ class AuthController extends Controller
 
         if($user && Hash::check($request->password, $user?->password)) {
             auth()->login($user);
-            return redirect(route('post.index'));
+            return redirect()->intended(route('post.index'));
         } else {
             return back()->withErrors([
                 'Login' => 'Passwords or email addresses do not match'
@@ -46,6 +47,8 @@ class AuthController extends Controller
         }
 
         $user->save();
+
+        event(new Registered($user));
 
         auth()->login($user);
         
