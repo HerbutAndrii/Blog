@@ -9,7 +9,7 @@ class EmailVerificationController extends Controller
 {
     public function notice(Request $request) {
         if($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended('/');
+            return redirect()->intended(route('post.index'));
         }
 
         return view('auth.verify-email');
@@ -17,7 +17,7 @@ class EmailVerificationController extends Controller
 
     public function verify(EmailVerificationRequest $request) {
         if($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended('/');
+            return redirect()->intended(route('post.index'));
         }
 
         $request->fulfill();
@@ -27,7 +27,7 @@ class EmailVerificationController extends Controller
 
     public function send(Request $request) {
         if($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended('/');
+            return redirect()->intended(route('post.index'));
         }
         
         $request->user()->sendEmailVerificationNotification();

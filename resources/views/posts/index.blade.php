@@ -3,7 +3,7 @@
 @include('header')
 @section('content')
     <h1>{{ $title }}</h1> <hr>
-    @if(isset($posts))
+    @isset($posts)
         <div class="blog-cards-container">
             @foreach($posts as $post)
                 <div class="blog-card">
@@ -11,7 +11,7 @@
                     <h2>{{ $post->title }}</h2>
                     <h3>
                         <a href="{{ route('category.show', $post->category) }}" style="text-decoration: none; color: #7878bd">
-                        {{ $post->category->name }}
+                            {{ $post->category->name }}
                         </a>
                     </h3>
                     <h4>{{ $post->likes()->count() }} likes</h4>
@@ -24,5 +24,5 @@
             @endforeach
         </div>
         {{ $posts->links() }}
-    @endif
+    @endisset
 @endsection

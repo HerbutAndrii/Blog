@@ -61,7 +61,7 @@
             </form>    
         </div>
     @endif
-    <h2>Comments ({{ $post->comments()->count() }})</h2>
+    <h2 style="font-size: 30px">Comments ({{ $post->comments()->count() }})</h2>
     <form action="{{ route('comment.store', $post) }}" method="POST">
         @csrf
         <label>

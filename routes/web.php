@@ -6,6 +6,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
@@ -71,3 +72,8 @@ Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 've
 Route::post('/email/verification-notification', [EmailVerificationController::class, 'send'])
             ->middleware(['auth', 'throttle:6,1'])
             ->name('verification.send');
+
+Route::get('/forgot-password', [ResetPasswordController::class, 'request'])->name('password.request');
+Route::post('/forgot-password', [ResetPasswordController::class, 'email'])->name('password.email');
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'update'])->name('password.update');

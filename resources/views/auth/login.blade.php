@@ -4,11 +4,15 @@
     <form class="auth-form" action="{{ route('auth.login') }}" method="POST">
         @csrf
         <h2>Log in</h2>
-        @error('Login')
+        @if(session('status'))
+            <div style="color: #029af8; font-size: 20px; text-align: center; margin-bottom: 20px" >{{ session('status') }}</div>
+        @endif
+        @error('login')
             <div style="color: red; font-size: 20px; text-align: center; margin-bottom: 20px" >{{ $message }}</div>
         @enderror
         <label>
-            Password <br>
+            Password 
+            <a href="{{ route('password.request') }}" style="margin-left: 200px">Forgot your password?</a> <br>
             <input type="password" name="password" value="{{ old('password') }}" placeholder="Enter your password"> <br>
         </label>
         @error('password')

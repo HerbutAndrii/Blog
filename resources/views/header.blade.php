@@ -20,13 +20,12 @@
             <li><a href="{{ route('post.user.index') }}">My posts</a></li>
         </div>
       @endif
-        
-        <li>
-            <form action="{{ route('auth.logout') }}" method="POST">
-                @csrf
-                <button class="logout" type="submit">Log out</button>
-            </form>
-        </li>
+      <li>
+        <form action="{{ route('auth.logout') }}" method="POST">
+          @csrf
+          <button class="logout" type="submit">Log out</button>
+        </form>
+      </li>
     </ul>
   </nav>
 </header>

@@ -119,7 +119,8 @@
 
   .button-comment,
   .button-post,
-  .button-login {
+  .button-login,
+  .button-reset {
     color: #fff;
     background-color: #029af8;
     display: inline-block;
@@ -195,7 +196,7 @@
   .site-header {
     background-color: #fff; 
     color: #0a0a0a; 
-    padding: 15px; 
+    padding: 10px; 
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -268,7 +269,7 @@
     font-family: "Roboto";
     font-weight: 900;
     padding: 10px 20px;
-    margin-top: 8px;
+    margin-top: 10px;
     border: none;
     border-radius: 30px;
     text-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -322,7 +323,8 @@
 
   .auth-form a {
     font-size: 20px;
-    margin-left: 60px;
+    margin-left: 100px;
+    text-decoration: none;
   }
 
   .auth-form input {
@@ -343,7 +345,7 @@
     font-family: "Roboto";
     border: none;
     border-radius: 8px;
-    margin:10px 0; 
+    margin: 15px 0; 
   }
 
   textarea {

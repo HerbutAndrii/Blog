@@ -23,7 +23,7 @@ class AuthController extends Controller
             return redirect()->intended(route('post.index'));
         } else {
             return back()->withErrors([
-                'Login' => 'Passwords or email addresses do not match'
+                'login' => 'Passwords or email addresses do not match'
             ])->withInput();
         }
     }
@@ -59,6 +59,6 @@ class AuthController extends Controller
         auth()->logout();
         session()->regenerate();
 
-        return redirect("/");
+        return redirect(route('auth.login'));
     }
 }
