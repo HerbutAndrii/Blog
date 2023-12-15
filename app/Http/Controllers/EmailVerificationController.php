@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\EmailVerificationNotificationJob;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -30,7 +31,7 @@ class EmailVerificationController extends Controller
             return redirect()->intended(route('post.index'));
         }
         
-        $request->user()->sendEmailVerificationNotification();
+        dispatch(new EmailVerificationNotificationJob($request->user()));
  
         return back()->with('message', 'Verification link sent!');
     }

@@ -9,7 +9,7 @@
         </a>
     </h2>
     <h3 style="text-align: center; color: #555">
-        {{ auth()->user()->name == $post->user->name ? 'You' : $post->user->name }} | {{ $date->year }} | {{ $date->format('F') }} {{ $date->day }} | {{ $date->format('H:i') }} | {{ $post->likes->count() }} likes
+        {{ auth()->user()->id == $post->user->id ? 'You' : $post->user->name }} | {{ $date->format('M d, Y, H:i') }} | {{ $post->likes->count() }} likes
     </h3> 
     <fieldset>
         <img class="preview-details" src="{{ asset('storage/previews/' . $post->preview) }}" alt="Preview">

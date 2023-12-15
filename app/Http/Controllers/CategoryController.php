@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PostRequest;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 
 class CategoryController extends Controller
@@ -14,7 +14,7 @@ class CategoryController extends Controller
             ->with('title', "Posts with category $category->name");
     }
 
-    public function store(PostRequest $request) {
+    public function store(CategoryRequest $request) {
         $category = new Category(['name' => $request->category_name]);
         $category->save();
 

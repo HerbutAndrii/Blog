@@ -8,6 +8,6 @@
         @if(session('message'))
             <div style="text-align: center; color: #029af8; font-size: 20px">{{ session('message') }}</div>
         @endif
-        <button class="button-resend" type="submit">Resend Verification Link</button>
+        <button class="button-send" type="submit">Resend Verification Link</button>
     </form>
 @endsection

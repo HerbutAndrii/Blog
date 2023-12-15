@@ -53,7 +53,6 @@
 
   .blog-card h4 {
     color: #b80220;
-    /* margin-bottom: 15px; */
     margin-top: 15px;
   }
 
@@ -87,7 +86,7 @@
 
   .button-delete,
   .button-like,
-  .button-resend {
+  .button-send {
     background-color: #b80220;
     color: #fff;
     display: inline-block;
@@ -103,14 +102,12 @@
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 
-  .button-resend {
+  .button-send {
     width: 94%;
   }
 
   .button-like {
-    /* margin-left: 20px; */
     border-radius: 30px;
-    /* margin-left: 42%; */
     margin-right: 10px;
     margin-bottom: 0;
     display: inline-block;
@@ -224,7 +221,6 @@
   .main-menu ul {
     list-style: none;
     text-align: center;
-    /* padding: 15px 0 0 0; */
     padding-top: 10px;
     margin: 0;
     display: flex;
@@ -238,9 +234,7 @@
     display: flex; 
     margin-top: 30px;
     padding: 15px 20px;
-    /* margin-bottom: 30px; */
-    margin: 5px; 
-    /* border-radius: 5px; */
+    margin: 10px; 
   }
   
   .main-menu a {
@@ -257,7 +251,6 @@
     padding-left: 20px;
     border-radius: 30px;
     margin-right: 50px;
-    /* text-align: center; */
   }
 
   .logout {
@@ -269,7 +262,7 @@
     font-family: "Roboto";
     font-weight: 900;
     padding: 10px 20px;
-    margin-top: 10px;
+    margin-top: 15px;
     border: none;
     border-radius: 30px;
     text-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -374,6 +367,11 @@
     border-radius: 10px;
     color: #fff;
     cursor: pointer;
+  }
+
+  input[type=checkbox] {
+    width: auto;
+    margin-left: 10px;
   }
 
   fieldset {

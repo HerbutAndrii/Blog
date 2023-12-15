@@ -100,7 +100,7 @@ class PostController extends Controller
 
     private function handlePreview(PostRequest $request, Post $post) {
         if($request->hasFile('preview')) {
-            $fileName = $request->file('preview')->getClientOriginalName();
+            $fileName = $request->file('preview')->hashName();
             $request->file('preview')->storeAs('public/previews', $fileName);
             $post->preview = $fileName;
         } else {

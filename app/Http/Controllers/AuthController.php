@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Jobs\EmailVerificationNotificationJob;
 use App\Models\User;
+use App\Notifications\EmailVerificationNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +21,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if($user && Hash::check($request->password, $user?->password)) {
-            auth()->login($user);
+            auth()->login($user, $request->remember);
             return redirect()->intended(route('post.index'));
         } else {
             return back()->withErrors([
@@ -48,16 +50,21 @@ class AuthController extends Controller
 
         $user->save();
 
-        event(new Registered($user));
+        dispatch(new EmailVerificationNotificationJob($user));
 
         auth()->login($user);
+
+        session()->regenerate();
         
-        return redirect(route('post.index'));
+        return redirect(route('verification.notice'));
     }
 
     public function logout() {
         auth()->logout();
-        session()->regenerate();
+
+        session()->invalidate();
+
+        session()->regenerateToken();
 
         return redirect(route('auth.login'));
     }

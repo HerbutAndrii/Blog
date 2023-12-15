@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PostRequest;
+use App\Http\Requests\TagRequest;
 use App\Models\Tag;
 
 class TagController extends Controller
@@ -14,7 +14,7 @@ class TagController extends Controller
             ->with('title', "Posts with tag $tag->name");
     }
 
-    public function store(PostRequest $request) {
+    public function store(TagRequest $request) {
         $tag = new Tag(['name' => $request->tag_name]);
         $tag->save();
 

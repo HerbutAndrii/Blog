@@ -3,7 +3,7 @@
 @section('content')
     <form class="auth-form" action="{{ route('auth.register') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <h2>Sign up</h2>
+        <h2>Sign Up</h2>
         <label>
             Name
             <input type="text" name="name" value="{{ old('name') }}" placeholder="Enter your name"> <br>
@@ -32,7 +32,7 @@
         @error('avatar')
             <div style="color: red; font-size: 20px; margin-bottom: 20px" >{{ $message }}</div>
         @enderror
-        <button class="button-login" type="submit">Sign up</button>
+        <button class="button-login" type="submit">Sign Up</button>
         <a href="{{ route('auth.loginView') }}">Already have an account?</a>
     </form>
 @endsection
