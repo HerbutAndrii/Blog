@@ -314,9 +314,16 @@
     letter-spacing: 3px;
   }
 
-  .auth-form a {
+  .register-link,
+  .login-link {
     font-size: 20px;
     margin-left: 100px;
+    text-decoration: none;
+  }
+
+  .forgot-password-link {
+    font-size: 20px;
+    margin-left: 200px;
     text-decoration: none;
   }
 
@@ -330,6 +337,23 @@
 
   .auth-form input[type=file] {
     width: 100%;
+  }
+
+  .github-link {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    color: black;
+    width: 460px;
+    padding: 15px;
+    margin: 5px;
+    font-size: 22px;
+    background-color: #fff;
+    border: 1px solid black;
+    border-radius: 15px;
+    text-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
   
   input, textarea {
@@ -371,7 +395,7 @@
 
   input[type=checkbox] {
     width: auto;
-    margin-left: 10px;
+    margin: 15px;
   }
 
   fieldset {

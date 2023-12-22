@@ -19,7 +19,7 @@
         @enderror
         <label>
             Password 
-            <a href="{{ route('password.request') }}" style="margin-left: 200px">Forgot your password?</a> <br>
+            <a href="{{ route('password.request') }}" class="forgot-password-link">Forgot your password?</a> <br>
             <input type="password" name="password" value="{{ old('password') }}" placeholder="Enter your password"> <br>
         </label>
         @error('password')
@@ -27,11 +27,15 @@
         @enderror
         <div style="display: flex">
             <label>
-                Rememeber me
-                <input type="checkbox" name="remember">
+                <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : ''}}>
+                Remember me
             </label>
         </div>
         <button class="button-login" type="submit">Log In</button>
-        <a href="{{ route('auth.registerView') }}">You do not have an account?</a>
+        <a href="{{ route('auth.registerView') }}" class="register-link">You do not have an account?</a> <hr>
+        <a href="{{ route('auth.github.redirect') }}" class="github-link">
+            <i class="fa-brands fa-github"></i> 
+            <span style="margin-left: 20px">Use GitHub account</span>
+        </a>
     </form>
 @endsection

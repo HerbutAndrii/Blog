@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             ->create()
             ->each(function ($user) {
 
-            Storage::put('public/avatars/default-avatar.jpg', Storage::get('/public/layouts/default-avatar.jpg'));
+            Storage::copy('/public/layouts/default-avatar.jpg', 'public/avatars/default-avatar.jpg');
 
             Post::factory(20)
                 ->create(['user_id' => $user->id, 'category_id' => rand(1,3)])
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
 
                 $post->tags()->attach([rand(1,5), rand(6,14), rand(15,20)]);
                     
-                Storage::put('public/previews/default-preview.avif', Storage::get('/public/layouts/default-preview.avif'));
+                Storage::copy('/public/layouts/default-preview.avif', 'public/previews/default-preview.avif');
 
                 Comment::factory(5)
                 ->create(['user_id' => rand(1, $post->user->id), 'post_id' => $post->id]);

@@ -21,13 +21,13 @@ class CommentRequest extends FormRequest
      */
     public function rules(): array
     {
-        if($this->submit == 'commnet') {
+        if($this->submit == 'comment') {
             return [
-                'content' => ['required', 'string'],
+                'content' => ['required', 'string']
             ];
         } else {
             return [
-                'edit_content' => ['required', 'string'],
+                'edit_content' => ['required', 'string']
             ];
         }
     }

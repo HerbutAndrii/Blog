@@ -104,7 +104,7 @@ class PostController extends Controller
             $request->file('preview')->storeAs('public/previews', $fileName);
             $post->preview = $fileName;
         } else {
-            Storage::put('public/previews/default-preview.avif', Storage::get('/public/layouts/default-preview.avif'));
+            Storage::copy('/public/layouts/default-preview.avif', 'public/previews/default-preview.avif');
         }
     }
 }

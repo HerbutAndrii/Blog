@@ -33,6 +33,10 @@
             <div style="color: red; font-size: 20px; margin-bottom: 20px" >{{ $message }}</div>
         @enderror
         <button class="button-login" type="submit">Sign Up</button>
-        <a href="{{ route('auth.loginView') }}">Already have an account?</a>
+        <a href="{{ route('auth.loginView') }}" class="login-link">Already have an account?</a> <hr>
+        <a href="{{ route('auth.github.redirect') }}" class="github-link">
+            <i class="fa-brands fa-github"></i> 
+            <span style="margin-left: 20px">Use GitHub account</span>
+        </a>
     </form>
 @endsection

@@ -41,11 +41,11 @@ class AuthController extends Controller
         $user->email = $request->email;
 
         if($request->hasFile('avatar')) {
-            $fileName = $request->file('avatar')->getClientOriginalName();
+            $fileName = $request->file('avatar')->hashName();
             $request->file('avatar')->storeAs('public/avatars', $fileName);
             $user->avatar = $fileName;
         } else {
-            Storage::put('public/avatars/default-avatar.jpg', Storage::get('/public/layouts/default-avatar.jpg'));
+            Storage::copy('/public/layouts/default-avatar.jpg', 'public/avatars/default-avatar.jpg');
         }
 
         $user->save();

@@ -8,6 +8,6 @@
     <script src="https://kit.fontawesome.com/15926ec26b.js" crossorigin="anonymous"></script>
 </head>
 <body>
-@yield('content')    
+    @yield('content')    
 </body>
 </html>

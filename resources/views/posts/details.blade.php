@@ -71,12 +71,12 @@
         @error('content')
             <div style="color: red; font-size: 20px; margin-bottom: 20px" >{{ $message }}</div>
         @enderror
-        <button class="button-comment" type="submit" value="commnet" name="submit">Add</button>
+        <button class="button-comment" type="submit" value="comment" name="submit">Add</button>
     </form>
     @if(! $post->comments()->exists())
         <h2 style="text-align: center;">No comments</h2>
     @else
-        @foreach($post->comments as $comment)
+        @foreach($post->comments->sortByDesc('updated_at') as $comment)
             @if($comment->user->id == auth()->user()->id)
                 <div class="comment">
                     <img src="{{ asset('storage/avatars/' . $comment->user->avatar) }}" alt="avatar">
@@ -125,27 +125,27 @@
         @endforeach
     @endif
     <h1>Related posts</h1> <hr>
-        @if($relatedPosts->isEmpty())
-            <h2 style="text-align: center;">No related posts</h2>
-        @else
-            <div class="blog-cards-container">
-                @foreach($relatedPosts as $post)
-                    <div class="blog-card">
-                        <img src="{{ asset('storage/previews/' . $post->preview) }}" alt="Preview">
-                        <h2>{{ $post->title }}</h2>
-                        <h3>
-                            <a href="{{ route('category.show', $post->category) }}" style="text-decoration: none; color: #7878bd">
-                                {{ $post->category->name }}
-                            </a>
-                        </h3>
-                        <h4>{{ $post->likes()->count() }} likes</h4>
-                        <p>{{ strlen($post->content) > 200 ? substr($post->content, 0, 200) . '...' : $post->content }}</p>
-                        <a class="details-link" href="{{ route('post.show', $post) }}">
-                            <span style="margin-right: 10px">Read more</span>
-                            <i class="fa-solid fa-arrow-right"></i>
+    @if($relatedPosts->isEmpty())
+        <h2 style="text-align: center;">No related posts</h2>
+    @else
+        <div class="blog-cards-container">
+            @foreach($relatedPosts as $post)
+                <div class="blog-card">
+                    <img src="{{ asset('storage/previews/' . $post->preview) }}" alt="Preview">
+                    <h2>{{ $post->title }}</h2>
+                    <h3>
+                        <a href="{{ route('category.show', $post->category) }}" style="text-decoration: none; color: #7878bd">
+                            {{ $post->category->name }}
                         </a>
-                    </div>
-                @endforeach
-            </div>
-        @endif
+                    </h3>
+                    <h4>{{ $post->likes()->count() }} likes</h4>
+                    <p>{{ strlen($post->content) > 200 ? substr($post->content, 0, 200) . '...' : $post->content }}</p>
+                    <a class="details-link" href="{{ route('post.show', $post) }}">
+                        <span style="margin-right: 10px">Read more</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+    @endif
 @endsection

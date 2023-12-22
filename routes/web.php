@@ -4,12 +4,15 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\GitHubController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,3 +80,6 @@ Route::get('/forgot-password', [ResetPasswordController::class, 'request'])->nam
 Route::post('/forgot-password', [ResetPasswordController::class, 'email'])->name('password.email');
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'reset'])->name('password.reset');
 Route::post('/reset-password', [ResetPasswordController::class, 'update'])->name('password.update');
+
+Route::get('/auth/redirect', [GitHubController::class, 'gitHubRedirect'])->name('auth.github.redirect');
+Route::get('/auth/callback', [GitHubController::class, 'gitHubCallback'])->name('auth.github.callback');

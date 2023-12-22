@@ -48,7 +48,6 @@ class PostControllerTest extends TestCase
             'post_id' => $this->post->id,
             'user_id' => $this->user->id
         ]);
-
     }
 
     public function test_index(): void

@@ -43,7 +43,7 @@
         @enderror
         <div class="new-category-tag">
             <input type="text" name="category_name" placeholder="Add a new category">
-            <button formaction="{{ route('category.store') }}" class="add-category" type="submit" value="category" name="submit">Add</button>
+            <button formaction="{{ route('category.store') }}" class="add-category" type="submit">Add</button>
             @error('category_name')
                 <div style="color: red; font-size: 20px" >{{ $message }}</div>
             @enderror
@@ -64,11 +64,11 @@
         @enderror
         <div class="new-category-tag">
             <input type="text" name="tag_name" placeholder="Add a new tag">
-            <button formaction="{{ route('tag.store') }}" class="add-tag" type="submit" value="tag" name="sumbit">Add</button>
+            <button formaction="{{ route('tag.store') }}" class="add-tag" type="submit">Add</button>
             @error('tag_name')
                 <div style="color: red; font-size: 20px" >{{ $message }}</div>
             @enderror        
         </div>
-        <button class="button-post" type="submit" value="post" name="submit">{{ isset($post) ? 'Update' : 'Create' }}</button>
+        <button class="button-post" type="submit" value="post">{{ isset($post) ? 'Update' : 'Create' }}</button>
     </form>
 @endsection
