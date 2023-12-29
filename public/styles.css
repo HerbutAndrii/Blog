@@ -84,7 +84,7 @@
     justify-content: center;
   }
 
-  .button-delete,
+  .delete-comment button,
   .button-like,
   .button-send {
     background-color: #b80220;
@@ -270,7 +270,6 @@
   }
 
   .comment {
-    display: flex;
     margin-top: 40px;
   }
 
@@ -287,7 +286,7 @@
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 
-  .comment div {
+  .date {
     margin-left: 60%;
     margin-top: 10px;
   }

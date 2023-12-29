@@ -61,7 +61,7 @@
             </form>    
         </div>
     @endif
-    <h2 style="font-size: 30px">Comments ({{ $post->comments()->count() }})</h2>
+    <h2 style="font-size: 30px" id="comments-count">Comments ({{ $post->comments()->count() }})</h2>
     <form action="{{ route('comment.store', $post) }}" method="POST">
         @csrf
         <label>
@@ -77,52 +77,54 @@
         <h2 style="text-align: center;">No comments</h2>
     @else
         @foreach($post->comments->sortByDesc('updated_at') as $comment)
-            @if($comment->user->id == auth()->user()->id)
-                <div class="comment">
-                    <img src="{{ asset('storage/avatars/' . $comment->user->avatar) }}" alt="avatar">
-                    <h3>You</h3>
-                    <div style="color: #555;">
-                        <strong>{{ $comment->getDateAsCarbon()->diffForHumans() }}</strong>
-                    </div>
-                </div>
-                @if(session('editComment') == $comment->id)
-                    <form action="{{ route('comment.update', $comment) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <textarea name="edit_content" style="font-size: 20px">{{ old('edit_content', $comment->content) }}</textarea> <br>
-                        @error('edit_content')
-                            <div style="color: red; font-size: 20px; margin-bottom: 20px" >{{ $message }}</div>
-                        @enderror
-                        <button type="submit" class="button-comment" value="edit_comment" name="submit">Update</button>
-                    </form>
-                @else
-                    <p style="font-size: 20px">{{ $comment->content }}</p>
-                    <div style="display: flex; height: 54px">
-                        <a href="{{ route('comment.edit', $comment) }}" class="link-edit">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                            <span style="margin-left: 10px">Edit comment</span>
-                        </a>
-                        <form action="{{ route('comment.destroy', $comment) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="button-delete" type="submit">
-                                <i class="fa-solid fa-trash"></i>
-                                <span style="margin-left: 10px">Delete comment</span>
-                            </button>
-                        </form>
-                    </div>
-                @endif
-            @else
             <div class="comment">
-                <img src="{{ asset('storage/avatars/' . $comment->user->avatar) }}" alt="avatar">
-                <h3>{{ $comment->user->name }}</h3>
-                <div style="color: #555;">
-                    <strong>{{ $comment->getDateAsCarbon()->diffForHumans() }}</strong>
-                </div>
+                @if($comment->user->id == auth()->user()->id)
+                    <div style="display: flex;">
+                        <img src="{{ asset('storage/avatars/' . $comment->user->avatar) }}" alt="avatar">
+                        <h3>You</h3>
+                        <div class="date">
+                            <strong>{{ $comment->getDateAsCarbon()->diffForHumans() }}</strong>
+                        </div>
+                    </div>
+                    @if(session('editComment') == $comment->id)
+                        <form action="{{ route('comment.update', $comment) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <textarea name="edit_content" style="font-size: 20px">{{ old('edit_content', $comment->content) }}</textarea> <br>
+                            @error('edit_content')
+                                <div style="color: red; font-size: 20px; margin-bottom: 20px" >{{ $message }}</div>
+                            @enderror
+                            <button type="submit" class="button-comment" value="edit_comment" name="submit">Update</button>
+                        </form>
+                    @else
+                        <p style="font-size: 20px">{{ $comment->content }}</p>
+                        <div style="display: flex; height: 54px">
+                            <a href="{{ route('comment.edit', $comment) }}" class="link-edit">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                                <span style="margin-left: 10px">Edit comment</span>
+                            </a>
+                            <form class="delete-comment">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" data-id="{{ $comment->id }}">
+                                    <i class="fa-solid fa-trash"></i>
+                                    <span style="margin-left: 10px">Delete comment</span>
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                @else
+                    <div style="display: flex;">
+                        <img src="{{ asset('storage/avatars/' . $comment->user->avatar) }}" alt="avatar">
+                        <h3>{{ $comment->user->name }}</h3>
+                        <div class="date">
+                            <strong>{{ $comment->getDateAsCarbon()->diffForHumans() }}</strong>
+                        </div>
+                    </div>
+                    <p style="font-size: 20px">{{ $comment->content }}</p>
+                @endif
             </div>
-            <p style="font-size: 20px">{{ $comment->content }}</p>
-            @endif
-        @endforeach
+            @endforeach
     @endif
     <h1>Related posts</h1> <hr>
     @if($relatedPosts->isEmpty())
@@ -148,4 +150,31 @@
             @endforeach
         </div>
     @endif
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.delete-comment').submit(function (event) {
+                event.preventDefault();
+
+                var commentId = $(this).find('button').data('id');
+                var commentElement = $(this).closest('.comment');
+                var deleteCommentUrl = "{{ route('comment.destroy', ':id') }}".replace(':id', commentId);
+
+                $.ajax({
+                    type: 'DELETE',
+                    url: deleteCommentUrl,
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        commentElement.remove();
+                        $('#comments-count').text('Comments (' + data.commentCount + ')');
+
+                        console.log('Comment deleted successfully');
+                    },
+                    error: function (error) {
+                        console.log('Error:', error.responseText);
+                    },
+                });
+            });
+        });
+    </script>
 @endsection

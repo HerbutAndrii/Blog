@@ -13,7 +13,7 @@ class CommentController extends Controller
         $comment->post()->associate($post);
         $comment->user()->associate(auth()->user());
         $comment->save();
-
+        
         return back();
     }
 
@@ -26,15 +26,17 @@ class CommentController extends Controller
     public function update(CommentRequest $request, Comment $comment) {
         $comment->content = $request->edit_content;
         $comment->save();
-        
-        $request->session()->forget('editComment');
 
+        $request->session()->forget('editComment');
+        
         return redirect(route('post.show', $comment->post));
     }
 
     public function destroy(Comment $comment) {
         $comment->delete();
 
-        return back();
+        return response()->json([
+            'commentCount' => $comment->post->comments()->count()
+        ]);
     }
 }
