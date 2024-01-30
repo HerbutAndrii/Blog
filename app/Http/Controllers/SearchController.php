@@ -10,8 +10,21 @@ use App\Models\Tag;
 class SearchController extends Controller
 {
     public function __invoke(SearchRequest $request) {
-        if($post = Post::where('title', $request->search)->first()) {
-            return redirect(route('post.show', $post));
+        if($request->ajax()) {
+            $posts = Post::where('title', 'like', '%'.$request->search.'%')
+                ->orderByDesc('updated_at')
+                ->get();
+                
+            return response()->json($posts);
+        }
+
+        $posts = Post::where('title', 'like', '%'.$request->search.'%')
+            ->orderByDesc('updated_at')
+            ->get();
+
+        if($posts->isNotEmpty()) {
+            return view('posts.index', compact('posts'))
+                ->with('title', 'Searching results');
         }
 
         if($category = Category::where('name', $request->search)->first()) {

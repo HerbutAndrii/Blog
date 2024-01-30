@@ -21,7 +21,7 @@ class CommentRequest extends FormRequest
      */
     public function rules(): array
     {
-        if($this->submit == 'comment') {
+        if(! isset($this->edit_content)) {
             return [
                 'content' => ['required', 'string']
             ];

@@ -13,14 +13,14 @@ class LikeController extends Controller
         $like = new Like(['user_id' => $user->id]);
         $post->likes()->save($like);
 
-        return back();
+        return response()->json(['likes' => $post->likes()->count()]);
     }
 
     public function unlike(Post $post) {
         $user = auth()->user();
 
         $post->likes()->where('user_id', $user->id)->delete();
-
-        return back();
+        
+        return response()->json(['likes' => $post->likes()->count()]);
     }
 }

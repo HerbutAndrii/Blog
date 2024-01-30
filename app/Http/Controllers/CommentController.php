@@ -14,22 +14,17 @@ class CommentController extends Controller
         $comment->user()->associate(auth()->user());
         $comment->save();
         
-        return back();
-    }
-
-    public function edit(Comment $comment) {
-        session(['editComment' => $comment->id]);
-        
-        return back();
+        return response()->json([
+            'comment' => $comment,
+            'commentCount' => $comment->post->comments()->count()
+        ]);
     }
 
     public function update(CommentRequest $request, Comment $comment) {
         $comment->content = $request->edit_content;
         $comment->save();
 
-        $request->session()->forget('editComment');
-        
-        return redirect(route('post.show', $comment->post));
+        return response()->json(['comment' => $comment]);
     }
 
     public function destroy(Comment $comment) {

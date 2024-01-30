@@ -12,7 +12,8 @@
       @if(auth()->user()->hasVerifiedEmail())
         <form class="search" action="{{ route('search') }}" method="POST">
             @csrf
-            <input type="text" name="search" placeholder="Search posts...">
+            <input id="search" type="text" name="search" placeholder="Search posts...">
+            <div id="search-results" class="dropdown-content"></div>
         </form>
         <div class="header-links">
             <li><a href="{{ route('post.create') }}">Create post</a></li>
@@ -29,3 +30,30 @@
     </ul>
   </nav>
 </header>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#search').keyup(function () {
+      if($(this).val() == '') {
+        $('#search-results').html('');
+        $('#search-results').hide();
+      } else {
+          $.ajax({
+          type: 'GET',
+          url: "{{ route('search') }}",
+          data: {
+            search: $(this).val()
+          },
+          success: function (data) {
+            $('#search-results').empty();
+            $.each(data, function(index, post) {
+              let url = "{{ route('post.show', ':id') }}".replace(':id', post.id);
+              $('#search-results').append('<a href="' + url + '">' + post.title + '</a> <br>');
+            })
+            $('#search-results').show();
+          }
+        });
+      }
+    });
+  });
+</script>

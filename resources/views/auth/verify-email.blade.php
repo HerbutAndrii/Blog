@@ -1,7 +1,7 @@
 @extends('layout')
 @section('title', 'Verify Email')
-@include('header')
 @section('content')
+    @include('header')
     <form class="auth-form" action="{{ route('verification.send') }}" method="POST">
         @csrf
         <h2>Verify Email</h2>

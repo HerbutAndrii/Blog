@@ -10,9 +10,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
-use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,9 +49,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/tags/show/{tag}', [TagController::class, 'show'])->name('tag.show');
     Route::get('/categories/show/{category}', [CategoryController::class, 'show'])->name('category.show');
-
-    Route::post('/search', SearchController::class)->name('search');
-});
+    
+    // Route::get('/search/{page}', SearchController::class)->name('search');
+    Route::any('/search/{page?}', SearchController::class)->name('search');
+}); 
 
 Route::post('/logout', [AuthController::class, 'logout'])
             ->middleware('auth')

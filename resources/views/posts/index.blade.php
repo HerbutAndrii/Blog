@@ -1,7 +1,7 @@
 @extends('layout')
 @section('title', 'Posts')
-@include('header')
 @section('content')
+    @include('header')
     <h1>{{ $title }}</h1> <hr>
     @isset($posts)
         <div class="blog-cards-container">
@@ -23,6 +23,8 @@
                 </div>
             @endforeach
         </div>
-        {{ $posts->links() }}
+        @if(method_exists($posts, 'links'))
+            {{ $posts->links() }}
+        @endif
     @endisset
 @endsection

@@ -60,11 +60,13 @@
     color: #555;
     font-size: 1em;
     flex-wrap: wrap;
+    overflow-wrap: break-word;
     margin-bottom: 60px;
     margin-top: 0;
   }
 
-  .link-edit {
+  .edit-post,
+  .edit-comment {
     text-decoration: none;
     color: #fff;
     background-color: #029af8;
@@ -85,6 +87,7 @@
   }
 
   .delete-comment button,
+  .delete-post,
   .button-like,
   .button-send {
     background-color: #b80220;
@@ -173,7 +176,7 @@
 
   .new-category-tag input {
     width: 350px;
-    height: 45px;
+    height: 25px;
   }
 
   .tags {
@@ -193,7 +196,7 @@
   .site-header {
     background-color: #fff; 
     color: #0a0a0a; 
-    padding: 10px; 
+    padding: 20px; 
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -221,7 +224,7 @@
   .main-menu ul {
     list-style: none;
     text-align: center;
-    padding-top: 10px;
+    padding-top: 0px;
     margin: 0;
     display: flex;
   }
@@ -237,7 +240,7 @@
     margin: 10px; 
   }
   
-  .main-menu a {
+  .header-links a {
     text-decoration: none; 
     color: #0a0a0a;
     font-size: 1.5em;
@@ -251,6 +254,32 @@
     padding-left: 20px;
     border-radius: 30px;
     margin-right: 50px;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f6f6f6;
+    width: 390px;
+    max-height: 500px;
+    border-radius: 15px;
+    z-index: 1;
+    overflow-y: auto;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+
+  .dropdown-content a {
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+    display: block;
+    /* border: 1px solid #ddd; */
+    /* border-radius: 15px; */
+    padding: 12px 16px;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
   }
 
   .logout {

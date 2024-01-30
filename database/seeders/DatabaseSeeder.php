@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
                 Comment::factory(5)
                 ->create(['user_id' => rand(1, $post->user->id), 'post_id' => $post->id]);
 
-                Like::factory(rand(0,50))->create(['user_id' => rand(1, $post->user->id), 'post_id' => $post->id]);
+                Like::factory(rand(0,20))->create(['user_id' => rand(1, $post->user->id), 'post_id' => $post->id]);
             });
         });
 
