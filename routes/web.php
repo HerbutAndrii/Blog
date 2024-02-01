@@ -23,8 +23,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('auth/login', 'welcome')->name('welcome');
-
 Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::get('/', [PostController::class, 'index'])->name('post.index');
