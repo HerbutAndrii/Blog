@@ -67,7 +67,7 @@
             <button class="add-tag" type="button" id="add-tag">Add</button>
             <div style="color: red; font-size: 20px" id="tag-error"></div>        
         </div>
-        <button class="button-post">{{ isset($post) ? 'Update' : 'Create' }}</button>
+        <button type="submit" class="button-post">{{ isset($post) ? 'Update' : 'Create' }}</button>
     </form>
 
     <script type="text/javascript">

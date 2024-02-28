@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,16 +43,40 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::any('/tags/store', [TagController::class, 'store'])->name('tag.store');
     
     Route::post('/comments/store/{post}', [CommentController::class, 'store'])->name('comment.store');
-    Route::get('/comments/edit/{comment}', [CommentController::class, 'edit'])->name('comment.edit');
     Route::put('/comments/update/{comment}', [CommentController::class, 'update'])->name('comment.update');
     Route::delete('/comments/delete/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 
     Route::get('/tags/show/{tag}', [TagController::class, 'show'])->name('tag.show');
     Route::get('/categories/show/{category}', [CategoryController::class, 'show'])->name('category.show');
     
-    // Route::get('/search/{page}', SearchController::class)->name('search');
-    Route::any('/search/{page?}', SearchController::class)->name('search');
+    Route::any('/search', SearchController::class)->name('search');
 }); 
+
+Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('index');
+
+    Route::get('/users', [AdminController::class, 'users'])->name('user.show');
+    Route::delete('users/delete/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+    
+    Route::get('/posts', [AdminController::class, 'posts'])->name('post.show');
+    Route::get('/posts/edit/{post}', [PostController::class, 'edit'])->name('post.edit');
+    Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->name('post.destroy');
+
+    Route::get('/categories', [AdminController::class, 'categories'])->name('category.show');
+    Route::get('/categories/edit/{category}', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::put('/categories/update/{category}', [CategoryController::class, 'update'])->name('category.update');
+    Route::delete('/categories/delete/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+    Route::get('/tags', [AdminController::class, 'tags'])->name('tag.show');
+    Route::get('/tags/edit/{tag}', [TagController::class, 'edit'])->name('tag.edit');
+    Route::put('/tags/update/{tag}', [TagController::class, 'update'])->name('tag.update');
+    Route::delete('/tags/delete/{tag}', [TagController::class, 'destroy'])->name('tag.destroy');
+
+    Route::get('/comments', [AdminController::class, 'comments'])->name('comment.show');
+    Route::get('/comments/edit/{comment}', [CommentController::class, 'edit'])->name('comment.edit');
+    Route::put('/comments/update/{comment}', [CommentController::class, 'update'])->name('comment.update');
+    Route::delete('/comments/delete/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
+});
 
 Route::post('/logout', [AuthController::class, 'logout'])
             ->middleware('auth')

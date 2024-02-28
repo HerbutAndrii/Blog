@@ -8,6 +8,7 @@ use App\Jobs\EmailVerificationNotificationJob;
 use App\Models\User;
 use App\Notifications\EmailVerificationNotification;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,16 +19,15 @@ class AuthController extends Controller
     }
 
     public function login(LoginRequest $request) {
-        $user = User::where('email', $request->email)->first();
+        if(Auth::attempt($request->validated(), $request->remember)) {
+            $request->session()->regenerate();
 
-        if($user && Hash::check($request->password, $user?->password)) {
-            auth()->login($user, $request->remember);
             return redirect()->intended(route('post.index'));
-        } else {
-            return back()->withErrors([
-                'login' => 'Passwords or email addresses do not match'
-            ])->withInput();
-        }
+        } 
+        
+        return back()->withErrors([
+            'login' => 'Passwords or email addresses do not match'
+        ])->withInput();
     }
 
     public function registerView() {

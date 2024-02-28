@@ -20,14 +20,31 @@ class CommentController extends Controller
         ]);
     }
 
-    public function update(CommentRequest $request, Comment $comment) {
-        $comment->content = $request->edit_content;
-        $comment->save();
+    public function edit(Comment $comment) {
+        $element = [
+            'self' => $comment,
+            'name' => 'comment',
+            'updateUrl' => route('admin.comment.update', $comment)
+        ];
 
-        return response()->json(['comment' => $comment]);
+        return view('admin.edit', compact('element'));
+    }
+
+    public function update(CommentRequest $request, Comment $comment) {
+        $this->authorize('update', $comment);
+
+        $comment->update(['content' => $request->edit_content]);
+
+        if($request->ajax()) {
+            return response()->json(['comment' => $comment]);   
+        }
+
+        return redirect(route('admin.comment.show'));
     }
 
     public function destroy(Comment $comment) {
+        $this->authorize('delete', $comment);
+
         $comment->delete();
 
         return response()->json([

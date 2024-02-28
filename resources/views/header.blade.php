@@ -16,6 +16,9 @@
             <div id="search-results" class="dropdown-content"></div>
         </form>
         <div class="header-links">
+            @if(auth()->user()->isAdministrator())
+              <li><a href="{{ route('admin.index') }}">Admin</a></li>
+            @endif
             <li><a href="{{ route('post.create') }}">Create post</a></li>
             <li><a href="{{ route('post.index') }}">All posts</a></li>
             <li><a href="{{ route('post.user.index') }}">My posts</a></li>

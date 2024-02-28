@@ -2,7 +2,7 @@
 @section('title', 'Details')
 @section('content')
     @include('header')
-    <h1 style="margin-bottom: 5px">{{ $post->title }}</h1> 
+    <h1 style="margin-bottom: 5px; flex-wrap: wrap; overflow-wrap: break-word;">{{ $post->title }}</h1> 
     <h2 style="text-align: center;">
         <a href="{{ route('category.show', $post->category) }}" style="text-decoration: none; color: #7878bd">
             {{ $post->category->name }}
@@ -26,7 +26,7 @@
             </button>
         </form>
         <form action="{{ route('post.unlike', $post) }}" method="POST" id="unlike" @style([
-                'display : none' => $like == false
+                'display : none' => $like === false
             ])>
             @csrf
             @method('DELETE')
@@ -89,10 +89,10 @@
                             </div>
                             <p style="font-size: 20px">{{ $comment->content }}</p>
                             <div style="display: flex; height: 54px">
-                                <a href="{{ route('comment.edit', $comment) }}" class="edit-comment" data-id="{{ $comment->id }}">
+                                <span class="edit-comment" data-id="{{ $comment->id }}">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                     <span style="margin-left: 10px">Edit comment</span>
-                                </a>
+                                </span>
                                 <form action="{{ route('comment.destroy', $comment) }}" method="POST" class="delete-comment">
                                     @csrf
                                     @method('DELETE')
@@ -153,10 +153,10 @@
             </div>
             <p style="font-size: 20px">@{{ content }}</p>
             <div style="display: flex; height: 54px">
-                <a href="@{{ editUrl }}" class="edit-comment" data-id="@{{ id }}">
+                <span class="edit-comment" data-id="@{{ id }}">
                     <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
                     <span style="margin-left: 10px">Edit comment</span>
-                </a>
+                </span>
                 <form action="@{{ deleteUrl }}" method="POST" class="delete-comment">
                     @csrf        
                     @method('DELETE')                           
@@ -205,7 +205,6 @@
                     data: $(this).serialize(),
                     success: function (data) {
                         var deleteCommentUrl = "{{ route('comment.destroy', ':id') }}".replace(':id', data.comment.id);
-                        var editCommentUrl = "{{ route('comment.edit', ':id') }}".replace(':id', data.comment.id);
 
                         var template = Handlebars.compile($('#comment-template').html());
                         var html = template({
@@ -213,7 +212,6 @@
                             id: data.comment.id,
                             avatar: "{{ asset('storage/avatars') }}" + '/' + data.comment.user.avatar,
                             deleteUrl: deleteCommentUrl,
-                            editUrl: editCommentUrl
                         });
 
                         if(data.commentCount === 1) {
@@ -242,7 +240,7 @@
 
                 var commentElement = $(this).closest('.comment');
                 var commentContent = commentElement.find('p').text(); 
-                var commentId = commentElement.find('a').data('id');
+                var commentId = $(this).data('id');
                 var updateCommentUrl = "{{ route('comment.update', ':id') }}".replace(':id', commentId);
 
                 commentElement.find('p').next().hide();
@@ -252,7 +250,7 @@
                     '<form action="' + updateCommentUrl + '" method="POST" class="comment-update">' +
                         '@csrf' +
                         '@method("PUT")' +
-                        '<textarea name="edit_content" style="font-size: 20px">' + commentContent + '</textarea> <br>' +
+                        '<textarea name="edit_content" rows=5 cols=33 style="font-size: 20px">' + commentContent + '</textarea> <br>' +
                         '<div style="color: red; font-size: 20px; margin-bottom: 20px; display: none" id="edit-content-error"></div>' +
                         '<button type="submit" class="button-comment">Update</button>' +
                     '</form>'
@@ -272,9 +270,6 @@
                     data: $(this).serialize(),
                     success: function (data) {
                         form.remove();
-
-                        var deleteCommentUrl = "{{ route('comment.destroy', ':id') }}".replace(':id', data.comment.id);
-                        var editCommentUrl = "{{ route('comment.edit', ':id') }}".replace(':id', data.comment.id);
 
                         commentElement.find('p').text(data.comment.content).show();
                         commentElement.find('p').next().show();

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -69,6 +70,8 @@ class PostController extends Controller
     }
 
     public function edit(Post $post) {
+        $this->authorize('update', $post);
+
         $categories = Category::all();
         $tags = Tag::all();
 
@@ -76,6 +79,8 @@ class PostController extends Controller
     }
 
     public function update(PostRequest $request, Post $post) {
+        $this->authorize('update', $post);
+
         $post->fill($request->only('title', 'content'));
         $post->category()->associate(Category::firstOrCreate(['name' => $request->category]));
         
@@ -90,10 +95,14 @@ class PostController extends Controller
         return redirect(route('post.user.index'));
     } 
 
-    public function destroy(Post $post) {
-        $post->comments()->delete();
-        $post->tags()->detach();
+    public function destroy(Request $request, Post $post) {
+        $this->authorize('delete', $post);
+
         $post->delete();
+
+        if($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
 
         return redirect(route('post.user.index'));
     }

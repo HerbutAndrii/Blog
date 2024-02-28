@@ -23,6 +23,12 @@ class DatabaseSeeder extends Seeder
         Category::factory(5)->create();
         Tag::factory(20)->create();
 
+        User::factory(1)->create([
+            'name' => 'Admin User',
+            'role' => 'admin',
+            'email' => 'admin.user@example.com'
+        ]);
+
         User::factory(3)
             ->create()
             ->each(function ($user) {
