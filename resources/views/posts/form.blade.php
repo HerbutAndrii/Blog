@@ -3,7 +3,7 @@
 @section('content')
     @include('header')
     <h1>{{ isset($post) ? 'Edit post' : 'Create post' }}</h1> <hr>
-    <form action="{{ isset($post) ? route('post.update', $post) : route('post.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ isset($post) ? route(url()->current() === route('admin.post.edit', $post) ? 'admin.post.update' : 'post.update', $post) : route('post.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @isset($post) @method('PUT') @endisset
         <label>

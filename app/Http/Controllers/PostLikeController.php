@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Like;
+use App\Models\PostLike;
 use App\Models\Post;
 
-class LikeController extends Controller
+class PostLikeController extends Controller
 {
     public function like(Post $post) {
         $user = auth()->user();
 
-        $like = new Like(['user_id' => $user->id]);
-        $post->likes()->save($like);
+        if(! $post->likes()->where('user_id', $user->id)->exists()) {
+            $like = new PostLike(['user_id' => $user->id]);
+            $post->likes()->save($like);
+        }
 
         return response()->json(['likes' => $post->likes()->count()]);
     }
@@ -19,8 +21,10 @@ class LikeController extends Controller
     public function unlike(Post $post) {
         $user = auth()->user();
 
-        $post->likes()->where('user_id', $user->id)->delete();
-        
+        if($like = $post->likes()->where('user_id', $user->id)) {
+            $like->delete();
+        }
+
         return response()->json(['likes' => $post->likes()->count()]);
     }
 }

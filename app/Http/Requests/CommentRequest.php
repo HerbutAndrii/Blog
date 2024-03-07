@@ -21,22 +21,8 @@ class CommentRequest extends FormRequest
      */
     public function rules(): array
     {
-        if(! isset($this->edit_content)) {
-            return [
-                'content' => ['required', 'string']
-            ];
-        } else {
-            return [
-                'edit_content' => ['required', 'string']
-            ];
-        }
-    }
-
-    public function messages(): array
-    {
         return [
-            'edit_content.required' => 'The content field is required.',
-            'edit_content.string' => 'The content field must be a string.'
+            'content' => ['required', 'string']
         ];
     }
 }

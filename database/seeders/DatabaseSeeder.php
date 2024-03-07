@@ -6,8 +6,10 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\CommentLike;
 use App\Models\Like;
 use App\Models\Post;
+use App\Models\PostLike;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -41,12 +43,15 @@ class DatabaseSeeder extends Seeder
 
                 $post->tags()->attach([rand(1,5), rand(6,14), rand(15,20)]);
                     
-                Storage::copy('/public/layouts/default-preview.avif', 'public/previews/default-preview.avif');
+                Storage::copy('/public/layouts/default-preview.jpg', 'public/previews/default-preview.jpg');
 
                 Comment::factory(5)
-                ->create(['user_id' => rand(1, $post->user->id), 'post_id' => $post->id]);
+                ->create(['user_id' => rand(1, $post->user->id), 'post_id' => $post->id])
+                ->each(function ($comment) {
+                    CommentLike::factory(rand(0, 20))->create(['user_id' => rand(1, $comment->post->user->id), 'comment_id' => $comment->id]);
+                });
 
-                Like::factory(rand(0,20))->create(['user_id' => rand(1, $post->user->id), 'post_id' => $post->id]);
+                PostLike::factory(rand(0,20))->create(['user_id' => rand(1, $post->user->id), 'post_id' => $post->id]);
             });
         });
 

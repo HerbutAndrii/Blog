@@ -15,23 +15,23 @@
         <img class="preview-details" src="{{ asset('storage/previews/' . $post->preview) }}" alt="Preview">
         <p style="text-align: center; font-size: 30px; overflow-wrap: anywhere">{{ $post->content }}</p>
     </fieldset>
-    <div class="like">
+    <div class="post-like">
         <form action="{{ route('post.like', $post) }}" method="POST" id="like" @style([
-                'display : none' => $like
+                'display : none' => $post->isLikedByUser()
             ])>
             @csrf
             <button class="button-like" type="submit">
-                <i class="fa-solid fa-thumbs-up"></i>
+                <i class="fa-regular fa-thumbs-up"></i>
                 <span style="margin-left: 10px">Like</span>
             </button>
         </form>
         <form action="{{ route('post.unlike', $post) }}" method="POST" id="unlike" @style([
-                'display : none' => $like === false
+                'display : none' => ! $post->isLikedByUser()
             ])>
             @csrf
             @method('DELETE')
             <button class="button-like" type="submit">
-                <i class="fa-solid fa-thumbs-down"></i>
+                <i class="fa-solid fa-thumbs-up"></i>
                 <span style="margin-left: 10px">Unlike</span>
             </button>
         </form> 
@@ -76,9 +76,9 @@
         @if(! $post->comments()->exists())
             <h2 style="text-align: center; font-size: 30px">No comments</h2> <hr>
         @else
-            <fieldset>
-                @foreach($post->comments->sortByDesc('updated_at') as $comment)
-                    <div class="comment">
+            @foreach($post->comments->sortByDesc('updated_at') as $comment)
+                <div class="comment">
+                    <fieldset>
                         @if($comment->user->id == auth()->user()->id)
                             <div style="display: flex;">
                                 <img src="{{ asset('storage/avatars/' . $comment->user->avatar) }}" alt="avatar">
@@ -87,7 +87,7 @@
                                     <strong>{{ $comment->getDateAsCarbon()->diffForHumans() }}</strong>
                                 </div>
                             </div>
-                            <p style="font-size: 20px">{{ $comment->content }}</p>
+                            <p style="font-size: 20px; overflow-wrap: anywhere">{{ $comment->content }}</p>
                             <div style="display: flex; height: 54px">
                                 <span class="edit-comment" data-id="{{ $comment->id }}">
                                     <i class="fa-solid fa-pen-to-square"></i>
@@ -101,6 +101,33 @@
                                         <span style="margin-left: 10px">Delete comment</span>
                                     </button>
                                 </form>
+                                <div class="comment-like" style="margin-left: 550px">
+                                    <form action="{{ route('comment.like', $comment) }}" method="POST" class="like-comment" @style([
+                                            'display : none' => $comment->isLikedByUser()
+                                        ])>
+                                        @csrf
+                                        <button class="button-like" type="submit">
+                                            <i class="fa-regular fa-thumbs-up"></i>
+                                            <span style="margin-left: 10px">
+                                                Like | 
+                                                <span class="comment-likes">{{ $comment->likes->count() }}</span>
+                                            </span>
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('comment.unlike', $comment) }}" method="POST" class="unlike-comment" @style([
+                                            'display : none' => ! $comment->isLikedByUser()
+                                        ])>
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="button-like" type="submit">
+                                            <i class="fa-solid fa-thumbs-up"></i>
+                                            <span style="margin-left: 10px">
+                                                Unlike | 
+                                                <span class="comment-likes">{{ $comment->likes->count() }}</span>
+                                            </span>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         @else
                             <div style="display: flex;">
@@ -110,11 +137,38 @@
                                     <strong>{{ $comment->getDateAsCarbon()->diffForHumans() }}</strong>
                                 </div>
                             </div>
-                            <p style="font-size: 20px">{{ $comment->content }}</p>
+                            <p style="font-size: 20px; overflow-wrap: anywhere">{{ $comment->content }}</p>
+                            <div class="comment-like">
+                                <form action="{{ route('comment.like', $comment) }}" method="POST" class="like-comment" @style([
+                                        'display : none' => $comment->isLikedByUser()
+                                    ])>
+                                    @csrf
+                                    <button class="button-like" type="submit">
+                                        <i class="fa-regular fa-thumbs-up"></i>
+                                        <span style="margin-left: 10px">
+                                            Like | 
+                                            <span class="comment-likes">{{ $comment->likes->count() }}</span>
+                                        </span>
+                                    </button>
+                                </form>
+                                <form action="{{ route('comment.unlike', $comment) }}" method="POST" class="unlike-comment" @style([
+                                        'display : none' => ! $comment->isLikedByUser()
+                                    ])>
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="button-like" type="submit">
+                                        <i class="fa-solid fa-thumbs-up"></i>
+                                        <span style="margin-left: 10px">
+                                            Unlike | 
+                                            <span class="comment-likes">{{ $comment->likes->count() }}</span>
+                                        </span>
+                                    </button>
+                                </form>
+                            </div>
                         @endif
-                    </div>
-                @endforeach
-            </fieldset>
+                    </fieldset>
+                </div>
+            @endforeach
         @endif
     </div>
     @if($relatedPosts->isEmpty())
@@ -144,28 +198,53 @@
 
     <script id="comment-template" type="text/x-handlebars-template">
         <div class="comment">
-            <div style="display: flex;">
-                <img src="@{{ avatar }}" alt="avatar">
-                <h3>You</h3>
-                <div class="date">
-                    <strong>Just now</strong>
+            <fieldset>
+                <div style="display: flex;">
+                    <img src="@{{ avatar }}" alt="avatar">
+                    <h3>You</h3>
+                    <div class="date">
+                        <strong>Just now</strong>
+                    </div>
                 </div>
-            </div>
-            <p style="font-size: 20px">@{{ content }}</p>
-            <div style="display: flex; height: 54px">
-                <span class="edit-comment" data-id="@{{ id }}">
-                    <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
-                    <span style="margin-left: 10px">Edit comment</span>
-                </span>
-                <form action="@{{ deleteUrl }}" method="POST" class="delete-comment">
-                    @csrf        
-                    @method('DELETE')                           
-                    <button type="submit">
-                        <i class="fa-solid fa-trash" aria-hidden="true"></i>
-                        <span style="margin-left: 10px">Delete comment</span>
-                    </button>
-                </form>
-            </div>
+                <p style="font-size: 20px; overflow-wrap: anywhere">@{{ content }}</p>
+                <div style="display: flex; height: 54px">
+                    <span class="edit-comment" data-id="@{{ id }}">
+                        <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                        <span style="margin-left: 10px">Edit comment</span>
+                    </span>
+                    <form action="@{{ deleteUrl }}" method="POST" class="delete-comment">
+                        @csrf        
+                        @method('DELETE')                           
+                        <button type="submit">
+                            <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                            <span style="margin-left: 10px">Delete comment</span>
+                        </button>
+                    </form>
+                    <div class="comment-like" style="margin-left: 550px">
+                        <form action="@{{ likeUrl }}" method="POST" class="like-comment">
+                            @csrf
+                            <button class="button-like" type="submit">
+                                <i class="fa-regular fa-thumbs-up"></i>
+                                <span style="margin-left: 10px">
+                                    Like | 
+                                    <span class="comment-likes">0</span>
+                                </span>
+                            </button>
+                        </form>
+                        <form action="@{{ unlikeUrl }}" method="POST" class="unlike-comment" style="display: none">
+                            @csrf
+                            @method('DELETE')
+                            <button class="button-like" type="submit">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                <span style="margin-left: 10px">
+                                    Unlike | 
+                                    <span class="comment-likes"></span>
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </fieldset>
         </div>
     </script>
 
@@ -185,7 +264,6 @@
                         $('#comments-count').text('Comments (' + data.commentCount + ')');
                         if(data.commentCount === 0) {
                             $('#comments').append('<h2 style="text-align: center; font-size: 30px">No comments</h2> <hr>');
-                            $('#comments').find('fieldset').remove();
                         }
                     },
                     error: function (error) {
@@ -205,6 +283,8 @@
                     data: $(this).serialize(),
                     success: function (data) {
                         var deleteCommentUrl = "{{ route('comment.destroy', ':id') }}".replace(':id', data.comment.id);
+                        var likeCommentUrl = "{{ route('comment.like', ':id') }}".replace(':id', data.comment.id);
+                        var unlikeCommentUrl = "{{ route('comment.unlike', ':id') }}".replace(':id', data.comment.id);
 
                         var template = Handlebars.compile($('#comment-template').html());
                         var html = template({
@@ -212,12 +292,14 @@
                             id: data.comment.id,
                             avatar: "{{ asset('storage/avatars') }}" + '/' + data.comment.user.avatar,
                             deleteUrl: deleteCommentUrl,
+                            likeUrl: likeCommentUrl,
+                            unlikeUrl: unlikeCommentUrl
                         });
 
                         if(data.commentCount === 1) {
-                            $('#comments').html('<fieldset>' + html + '</fieldset>');
+                            $('#comments').html(html);
                         } else {
-                            $('#comments').find('fieldset').prepend(html);
+                            $('#comments').prepend(html);
                         }
 
                         commentContent.val('');
@@ -246,12 +328,12 @@
                 commentElement.find('p').next().hide();
                 commentElement.find('p').hide();
 
-                commentElement.append(
+                commentElement.find('fieldset').append(
                     '<form action="' + updateCommentUrl + '" method="POST" class="comment-update">' +
                         '@csrf' +
                         '@method("PUT")' +
-                        '<textarea name="edit_content" rows=5 cols=33 style="font-size: 20px">' + commentContent + '</textarea> <br>' +
-                        '<div style="color: red; font-size: 20px; margin-bottom: 20px; display: none" id="edit-content-error"></div>' +
+                        '<textarea name="content" rows=5 style="font-size: 20px; width: 1255px">' + commentContent + '</textarea> <br>' +
+                        '<div style="color: red; font-size: 20px; margin-bottom: 20px; display: none" class="edit-content-error"></div>' +
                         '<button type="submit" class="button-comment">Update</button>' +
                     '</form>'
                 );
@@ -277,9 +359,9 @@
                     error: function (err) {
                         let error = err.responseJSON;
                         $.each(error.errors, function (index, value) {
-                            $('#edit-content-error').text(value);
+                            form.find('.edit-content-error').text(value);
                         });
-                        $('#edit-content-error').show();
+                        form.find('.edit-content-error').show();
                     }
                 });
             });
@@ -294,8 +376,35 @@
                     url: form.attr('action'),
                     data: form.serialize(),
                     success: function (data) {
-                        form.closest('.like').find('#like, #unlike').toggle();
+                        form.closest('.post-like').find('#like, #unlike').toggle();
                         $('#likes-count').text(data.likes);
+                    },
+                    error: function (error) {
+                        console.log(error.responseText);
+                    }
+                });
+            });
+
+            $('#comments').on('submit', '.like-comment, .unlike-comment', function (event) {
+                event.preventDefault();
+                
+                var form = $(this);
+
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function (data) {
+                        form.hide();
+                        if(form.hasClass('like-comment')) {
+                            var newForm = form.closest('.comment-like').find('.unlike-comment');
+                            newForm.find('.comment-likes').text(data.likes);
+                            newForm.show();
+                        } else {
+                            var newForm = form.closest('.comment-like').find('.like-comment');
+                            newForm.find('.comment-likes').text(data.likes); 
+                            newForm.show();
+                        }
                     },
                     error: function (error) {
                         console.log(error.responseText);

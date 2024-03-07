@@ -9,7 +9,7 @@
         <label>
             @if($element['name'] === 'comment')
                 Content <br>
-                <textarea name="edit_content" rows="8" cols="33" placeholder="Content...">{{ old('edit_content', $element['self']['content']) }}</textarea> <br>
+                <textarea name="content" rows="8" cols="33" placeholder="Content...">{{ old('edit_content', $element['self']['content']) }}</textarea> <br>
             @else
                 Name <br>
                 <input type="text" name="{{ $element['name'] . '_name' }}" value="{{ old($element['name'] . '_name', $element['self']['name']) }}" placeholder="Name"> <br>

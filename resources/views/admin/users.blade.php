@@ -16,7 +16,7 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
                 <td>
-                    <form action="{{ route('admin.user.destroy', $user) }}" method="POST">
+                    <form action="{{ route('admin.user.destroy', $user) }}" method="POST" class="delete-user-form">
                         @csrf
                         @method('DELETE')
                         <button class="delete-user" type="submit">
@@ -32,7 +32,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('form').submit(function (event) {
+            $('.delete-user-form').submit(function (event) {
                 event.preventDefault();
 
                 var form = $(this);

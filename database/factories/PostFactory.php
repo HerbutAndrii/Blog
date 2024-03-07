@@ -19,7 +19,7 @@ class PostFactory extends Factory
         return [
             'title' => ucfirst(fake()->words(3, true)),
             'content' => fake()->sentences(10, true),
-            'preview' => 'default-preview.avif',
+            'preview' => 'default-preview.jpg',
             'category_id' => 1,
         ];
     }

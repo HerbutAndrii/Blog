@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Like>
  */
-class LikeFactory extends Factory
+class PostLikeFactory extends Factory
 {
     /**
      * Define the model's default state.

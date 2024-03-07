@@ -38,7 +38,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('form').submit(function (event) {
+            $('.delete-comment').submit(function (event) {
                 event.preventDefault();
 
                 var form = $(this);

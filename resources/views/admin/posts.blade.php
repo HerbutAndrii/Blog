@@ -23,7 +23,7 @@
                             <i class="fa-solid fa-pen-to-square"></i>  
                             <span style="margin-left: 10px">Edit post</span>
                         </a>
-                        <form action="{{ route('admin.post.destroy', $post) }}" method="POST">
+                        <form action="{{ route('admin.post.destroy', $post) }}" method="POST" class="delete-post-form">
                             @csrf
                             @method('DELETE')
                             <button class="delete-post" type="submit">
@@ -40,7 +40,7 @@
     
     <script type="text/javascript">
         $(document).ready(function () {
-            $('form').submit(function (event) {
+            $('.delete-post-form').submit(function (event) {
                 event.preventDefault();
 
                 var form = $(this);

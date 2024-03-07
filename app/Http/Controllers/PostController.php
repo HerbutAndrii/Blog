@@ -16,8 +16,8 @@ class PostController extends Controller
         $posts = Post::with('category', 'likes')
             ->orderByDesc('updated_at')
             ->paginate(6);
-            
-        return view('posts.index', compact('posts'))
+
+            return view('posts.index', compact('posts'))
             ->with('title', 'All posts');
     }
 
@@ -35,15 +35,13 @@ class PostController extends Controller
         $date = Carbon::parse($post->updated_at);
 
         $relatedPosts = $post->category->posts()
-                        ->with('user', 'category', 'tags', 'comments')
+                        ->with('category', 'likes')
                         ->orderByDesc('updated_at')
                         ->where('id', '!=', $post->id)
                         ->take(3)
                         ->get();
 
-        $like = $post->likes()->where('user_id', auth()->user()->id)->exists();
-
-        return view('posts.details', compact('post', 'date', 'relatedPosts', 'like'));
+        return view('posts.details', compact('post', 'date', 'relatedPosts'));
     }
 
     public function create() {
@@ -91,12 +89,20 @@ class PostController extends Controller
         if($request->has('tags')) {
             $post->tags()->sync($request->tags);
         }
+
+        if(url()->current() === route('admin.post.update', $post)) {
+            return redirect(route('admin.post.show'));
+        }
         
         return redirect(route('post.user.index'));
     } 
 
     public function destroy(Request $request, Post $post) {
         $this->authorize('delete', $post);
+
+        if($post->preview != 'default-preview.jpg') {
+            Storage::delete('public/previews/' . $post->preview);
+        }
 
         $post->delete();
 
@@ -113,7 +119,7 @@ class PostController extends Controller
             $request->file('preview')->storeAs('public/previews', $fileName);
             $post->preview = $fileName;
         } else {
-            Storage::copy('/public/layouts/default-preview.avif', 'public/previews/default-preview.avif');
+            Storage::copy('/public/layouts/default-preview.jpg', 'public/previews/default-preview.jpg');
         }
     }
 }

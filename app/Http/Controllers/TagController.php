@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TagRequest;
 use App\Models\Tag;
-use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
@@ -19,6 +18,13 @@ class TagController extends Controller
             ->with('title', "Posts with tag $tag->name");
     }
 
+    public function store(TagRequest $request) {
+        $tag = new Tag(['name' => $request->tag_name]);
+        $tag->save();
+
+        return response()->json(['tag' => $tag]);
+    }
+
     public function edit(Tag $tag) {
         $element = [
             'self' => $tag,
@@ -30,27 +36,12 @@ class TagController extends Controller
     }
 
     public function update(TagRequest $request, Tag $tag) {
-        if(! $request->user()->isAdministrator()) {
-            abort(403);
-        }
-
         $tag->update(['name' => $request->tag_name]);
 
         return redirect(route('admin.tag.show'));
     }
 
-    public function store(TagRequest $request) {
-        $tag = new Tag(['name' => $request->tag_name]);
-        $tag->save();
-
-        return response()->json(['tag' => $tag]);
-    }
-
-    public function destroy(Request $request, Tag $tag) {
-        if(! $request->user()->isAdministrator()) {
-            abort(403);
-        }
-
+    public function destroy(Tag $tag) {
         $tag->delete();
 
         return response()->json(['success' => true]);

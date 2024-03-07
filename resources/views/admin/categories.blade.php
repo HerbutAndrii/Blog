@@ -19,7 +19,7 @@
                             <i class="fa-solid fa-pen-to-square"></i>  
                             <span style="margin-left: 10px">Edit category</span>
                         </a>
-                        <form action="{{ route('admin.category.destroy', $category) }}" method="POST">
+                        <form action="{{ route('admin.category.destroy', $category) }}" method="POST" class="delete-category-form">
                             @csrf
                             @method('DELETE')
                             <button class="delete-category" type="submit">
@@ -36,7 +36,7 @@
     
     <script type="text/javascript">
         $(document).ready(function () {
-            $('form').submit(function (event) {
+            $('.delete-category-form').submit(function (event) {
                 event.preventDefault();
 
                 var form = $(this);

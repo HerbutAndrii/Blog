@@ -19,7 +19,7 @@
                             <i class="fa-solid fa-pen-to-square"></i>  
                             <span style="margin-left: 10px">Edit tag</span>
                         </a>
-                        <form action="{{ route('admin.tag.destroy', $tag) }}" method="POST">
+                        <form action="{{ route('admin.tag.destroy', $tag) }}" method="POST" class="delete-tag-form">
                             @csrf
                             @method('DELETE')
                             <button class="delete-category" type="submit">
@@ -36,7 +36,7 @@
     
     <script type="text/javascript">
         $(document).ready(function () {
-            $('form').submit(function (event) {
+            $('.delete-tag-form').submit(function (event) {
                 event.preventDefault();
 
                 var form = $(this);

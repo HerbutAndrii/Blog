@@ -33,7 +33,7 @@ class CommentController extends Controller
     public function update(CommentRequest $request, Comment $comment) {
         $this->authorize('update', $comment);
 
-        $comment->update(['content' => $request->edit_content]);
+        $comment->update(['content' => $request->content]);
 
         if($request->ajax()) {
             return response()->json(['comment' => $comment]);   

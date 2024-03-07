@@ -4,9 +4,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CommentLikeController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\GitHubController;
-use App\Http\Controllers\LikeController;
+use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\SearchController;
@@ -35,24 +36,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/posts/update/{post}', [PostController::class, 'update'])->name('post.update');
     Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->name('post.destroy');
     Route::get('/posts/details/{post}', [PostController::class, 'show'])->name('post.show');
-   
-    Route::post('/posts/like/{post}', [LikeController::class, 'like'])->name('post.like');
-    Route::delete('/posts/unlike/{post}', [LikeController::class, 'unlike'])->name('post.unlike');
-
-    Route::any('/categories/store', [CategoryController::class, 'store'])->name('category.store');
-    Route::any('/tags/store', [TagController::class, 'store'])->name('tag.store');
+    Route::post('/posts/like/{post}', [PostLikeController::class, 'like'])->name('post.like');
+    Route::delete('/posts/unlike/{post}', [PostLikeController::class, 'unlike'])->name('post.unlike');
     
     Route::post('/comments/store/{post}', [CommentController::class, 'store'])->name('comment.store');
     Route::put('/comments/update/{comment}', [CommentController::class, 'update'])->name('comment.update');
     Route::delete('/comments/delete/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
+    Route::post('/comments/like/{comment}', [CommentLikeController::class, 'like'])->name('comment.like');
+    Route::delete('/comments/unlike/{comment}', [CommentLikeController::class, 'unlike'])->name('comment.unlike');
 
-    Route::get('/tags/show/{tag}', [TagController::class, 'show'])->name('tag.show');
+    Route::any('/categories/store', [CategoryController::class, 'store'])->name('category.store');
     Route::get('/categories/show/{category}', [CategoryController::class, 'show'])->name('category.show');
+    
+    Route::any('/tags/store', [TagController::class, 'store'])->name('tag.store');
+    Route::get('/tags/show/{tag}', [TagController::class, 'show'])->name('tag.show');
     
     Route::any('/search', SearchController::class)->name('search');
 }); 
 
-Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['admin', 'auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('index');
 
     Route::get('/users', [AdminController::class, 'users'])->name('user.show');
@@ -60,6 +62,7 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     
     Route::get('/posts', [AdminController::class, 'posts'])->name('post.show');
     Route::get('/posts/edit/{post}', [PostController::class, 'edit'])->name('post.edit');
+    Route::put('/posts/update/{post}', [PostController::class, 'update'])->name('post.update');
     Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->name('post.destroy');
 
     Route::get('/categories', [AdminController::class, 'categories'])->name('category.show');
