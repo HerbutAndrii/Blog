@@ -132,7 +132,11 @@
                         @else
                             <div style="display: flex;">
                                 <img src="{{ asset('storage/avatars/' . $comment->user->avatar) }}" alt="avatar">
-                                <h3>{{ $comment->user->name }}</h3>
+                                <h3>
+                                    <a href="{{ route('user.show', $comment->user) }}" style="text-decoration: none; color: black">
+                                        {{ $comment->user->name }}
+                                    </a>
+                                </h3>
                                 <div class="date">
                                     <strong>{{ $comment->getDateAsCarbon()->diffForHumans() }}</strong>
                                 </div>
@@ -189,7 +193,7 @@
                     <p>{{ strlen($post->content) > 200 ? substr($post->content, 0, 200) . '...' : $post->content }}</p>
                     <a class="details-link" href="{{ route('post.show', $post) }}">
                         <span style="margin-right: 10px">Read more</span>
-                        <i class="fa-solid fa-arrow-right"></i>
+                        <i class="fa-solid fa-angle-right"></i>
                     </a>
                 </div>
             @endforeach

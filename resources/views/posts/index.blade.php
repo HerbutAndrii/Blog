@@ -2,6 +2,11 @@
 @section('title', 'Posts')
 @section('content')
     @include('header')
+    @isset($user)
+        <div class="user-avatar">
+            <img src="{{ asset('storage/avatars/' . $user->avatar) }}" alt="avatar">
+        </div>
+    @endisset
     <h1>{{ $title }}</h1> <hr>
     @isset($posts)
         <div class="blog-cards-container">
@@ -18,7 +23,7 @@
                     <p>{{ strlen($post->content) > 200 ? substr($post->content, 0, 200) . '...' : $post->content }}</p>
                     <a class="details-link" href="{{ route('post.show', $post) }}">
                         <span style="margin-right: 10px">Read more</span>
-                        <i class="fa-solid fa-arrow-right"></i>
+                        <i class="fa-solid fa-angle-right"></i>
                     </a>
                 </div>
             @endforeach

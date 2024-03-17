@@ -21,9 +21,15 @@ class TagRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'tag_name' => ['required', 'string', 'unique:tags,name']
-        ];
+        if(url()->current() === route('tag.store')) {
+            return [
+                'tag_name' => ['required', 'string', 'unique:tags,name']
+            ];
+        } else {
+            return [
+                'tag_name' => ['required', 'string']
+            ];
+        }
     }
 
     protected function prepareForValidation(): void

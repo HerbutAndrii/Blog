@@ -20,8 +20,9 @@
 
   .details-link {
     text-decoration: none;
-    color: #fff;
-    background-color: #030d13;
+    color: #030d13;
+    background-color: #eaeff1;
+    border: 2px solid #030d13;
     position: absolute;
     bottom: 10px;
     text-align: center;
@@ -73,16 +74,17 @@
   .edit-comment,
   .edit-category,
   .edit-tag,
-  .admin-show {
+  .show {
     cursor: pointer;
     text-decoration: none;
-    color: #fff;
-    background-color: #029af8;
+    color: #029af8;
+    background-color: #eaeff1;
+    border: 2px solid #029af8;
     display: inline-block;
     width: 160px;
     text-align: center;
     font-size: 20px;
-    padding: 10px 20px;
+    padding: 8px 20px;
     border-radius: 30px;
     margin-bottom: 10px;
     margin-right: 10px;
@@ -96,7 +98,6 @@
   }
 
   .comment-like {
-    /* flex-shrink: 1; */
     width: 250px; 
     margin-left: 75%;
   }
@@ -107,19 +108,24 @@
   .button-send,
   .delete-user,
   .delete-category {
-    background-color: #b80220;
-    color: #fff;
+    background-color: #eaeff1;
+    color: #b80220;
+    border: 2px solid #b80220;
     display: inline-block;
     width: 205px;
     text-align: center;
     font-family: "Roboto";
     font-size: 20px;
-    padding: 10px 20px;
-    border: none;
+    padding: 8.38px 20px;
     border-radius: 30px;
     margin-bottom: 20px;
     text-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+
+  .delete-comment button {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
   .button-send {
@@ -139,14 +145,14 @@
   .button-post,
   .button-login,
   .button-reset {
-    color: #fff;
-    background-color: #029af8;
+    color: #029af8;
+    background-color: #eaeff1;
+    border: 2px solid #029af8;
     display: inline-block;
     text-align: center;
     font-size: 25px;
     font-family: "Roboto";
     padding: 10px 20px;
-    border: none;
     border-radius: 10px;
     margin-left: 10px;
     margin-top: 10px;
@@ -173,14 +179,14 @@
 
   .add-category,
   .add-tag {
-    color: #fff;
-    background-color: #b80220;
+    color: #b80220;
+    background-color: #eaeff1;
+    border: 2px solid #b80220;
     height: 43px;
     text-align: center;
     font-size: 20px;
     font-family: "Roboto";
-    padding: 8px 20px;
-    border: none;
+    padding: 7px 20px;
     border-radius: 10px;
     margin-left: 10px;
     text-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -249,7 +255,7 @@
   }
   
   .main-menu li {
-    margin-right: 20px; 
+    margin-right: 30px; 
   }
 
   .header-links {
@@ -259,7 +265,8 @@
     margin: 10px; 
   }
   
-  .header-links a {
+  .header-links a,
+  .sort-dropdown span {
     text-decoration: none; 
     color: #0a0a0a;
     font-size: 1.5em;
@@ -267,7 +274,6 @@
 
   .search input {
     background-color: #eaeff1;
-    /* max-width: 350px; */
     width: 300px;
     font-size: 20px;
     padding-right: 20px;
@@ -293,8 +299,6 @@
     color: black;
     font-size: 20px;
     display: block;
-    /* border: 1px solid #ddd; */
-    /* border-radius: 15px; */
     padding: 12px 16px;
   }
 
@@ -302,9 +306,22 @@
     background-color: #f1f1f1;
   }
 
+  .user-avatar {
+    text-align: center;
+  }
+
+  .user-avatar img {
+    margin-top: 50px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+
   .logout {
-    background-color: #0a0a0a;
-    color: #fff;
+    background-color: #fff;
+    color: #0a0a0a;
+    border: 2px solid #0a0a0a;
     display: inline-block;
     text-align: center;
     font-size: 20px;
@@ -312,7 +329,6 @@
     font-weight: 900;
     padding: 10px 20px;
     margin-top: 15px;
-    border: none;
     border-radius: 30px;
     text-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -397,7 +413,7 @@
     padding: 15px;
     margin: 5px;
     font-size: 22px;
-    background-color: #fff;
+    background-color: #eaeff1;
     border: 1px solid black;
     border-radius: 15px;
     text-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -442,13 +458,18 @@
     border-radius: 5px;
   }
 
-  .admin-panel {
+  .list-block {
     display: flex; 
     align-items: center; 
     justify-content: space-between;
   }
 
-  .admin-show {
+  .list-block h2 {
+    font-size: 30px;
+    margin-left: 20px;
+  }
+
+  .show {
     font-size: 25px;
     padding: 20px 20px;
     margin-right: 70px;
@@ -457,12 +478,50 @@
 
   .delete-user,
   .delete-category {
-    width: auto;
     margin: 10px;
   }
 
   .update-category {
     margin-left: 30px;
+  }
+
+  .dropdown-menu {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-menu span {
+    cursor: pointer;
+    color: #0a0a0a;
+    font-size: 1.5em;
+  }
+
+  .dropdown-menu-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    min-width: 150px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    z-index: 1;
+    left: -50%;
+  }
+
+  .dropdown-menu-content a {
+    color: black;
+    padding: 12px 16px;
+    font-size: 1.5em;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-menu-content a:hover {
+    background-color: #f1f1f1;
+    border-radius: 15px;
+  }
+
+  .dropdown-menu:hover .dropdown-menu-content {
+    display: block;
   }
 
   table {
@@ -526,11 +585,11 @@
     margin-right: 20px;
     font-family: "Roboto";
     font-size: 25px;
-    border: none;
-    background: #b80220;
+    background: #eaeff1;
+    border: 2px solid #b80220;
     padding: 10px 20px;
     border-radius: 10px;
-    color: #fff;
+    color: #b80220;
     cursor: pointer;
   }
 

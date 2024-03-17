@@ -17,7 +17,7 @@ class PostController extends Controller
             ->orderByDesc('updated_at')
             ->paginate(6);
 
-            return view('posts.index', compact('posts'))
+        return view('posts.index', compact('posts'))
             ->with('title', 'All posts');
     }
 
@@ -73,6 +73,10 @@ class PostController extends Controller
         $categories = Category::all();
         $tags = Tag::all();
 
+        if(url()->current() === route('admin.post.edit', $post)) {
+            session(['url' => url()->previous()]);
+        }
+
         return view('posts.form', compact('post', 'categories', 'tags'));
     }
 
@@ -91,7 +95,10 @@ class PostController extends Controller
         }
 
         if(url()->current() === route('admin.post.update', $post)) {
-            return redirect(route('admin.post.show'));
+            $url = session('url');
+            session()->forget('url');
+
+            return redirect($url);
         }
         
         return redirect(route('post.user.index'));

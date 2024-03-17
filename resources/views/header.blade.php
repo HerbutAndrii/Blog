@@ -19,9 +19,19 @@
             @if(auth()->user()->isAdministrator())
               <li><a href="{{ route('admin.index') }}">Admin</a></li>
             @endif
-            <li><a href="{{ route('post.create') }}">Create post</a></li>
-            <li><a href="{{ route('post.index') }}">All posts</a></li>
-            <li><a href="{{ route('post.user.index') }}">My posts</a></li>
+            <li><a href="{{ route('category.index') }}">Categories</a></li>
+            <li><a href="{{ route('tag.index') }}">Tags</a></li>
+            <li>
+              <div class="dropdown-menu">
+                  <span style="margin-right: 5px">Posts</span>
+                  <i class="fa-solid fa-angle-down"></i>
+                  <div class="dropdown-menu-content">
+                      <a href="{{ route('post.index') }}">All posts</a>
+                      <a href="{{ route('post.user.index') }}">My posts</a>
+                      <a href="{{ route('post.create') }}">Create post</a>
+                  </div>
+              </div>
+            </li>
         </div>
       @endif
       <li>

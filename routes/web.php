@@ -38,19 +38,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/posts/details/{post}', [PostController::class, 'show'])->name('post.show');
     Route::post('/posts/like/{post}', [PostLikeController::class, 'like'])->name('post.like');
     Route::delete('/posts/unlike/{post}', [PostLikeController::class, 'unlike'])->name('post.unlike');
-    
+
     Route::post('/comments/store/{post}', [CommentController::class, 'store'])->name('comment.store');
     Route::put('/comments/update/{comment}', [CommentController::class, 'update'])->name('comment.update');
     Route::delete('/comments/delete/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
     Route::post('/comments/like/{comment}', [CommentLikeController::class, 'like'])->name('comment.like');
     Route::delete('/comments/unlike/{comment}', [CommentLikeController::class, 'unlike'])->name('comment.unlike');
 
-    Route::any('/categories/store', [CategoryController::class, 'store'])->name('category.store');
+    Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');
+    Route::post('/categories/store', [CategoryController::class, 'store'])->name('category.store');
     Route::get('/categories/show/{category}', [CategoryController::class, 'show'])->name('category.show');
     
-    Route::any('/tags/store', [TagController::class, 'store'])->name('tag.store');
+    Route::get('/tags', [TagController::class, 'index'])->name('tag.index');
+    Route::post('/tags/store', [TagController::class, 'store'])->name('tag.store');
     Route::get('/tags/show/{tag}', [TagController::class, 'show'])->name('tag.show');
     
+    Route::get('/users/show/{user}', [UserController::class, 'show'])->name('user.show');
+
     Route::any('/search', SearchController::class)->name('search');
 }); 
 
