@@ -58,4 +58,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdministrator() {
         return $this->role === 'admin';
     }
+
+    public function subscribers() {
+        return $this->belongsToMany(User::class, 'subscriptions', 'account_id', 'subscriber_id');
+    }
+
+    public function subscriptions() {
+        return $this->belongsToMany(User::class, 'subscriptions', 'subscriber_id', 'account_id');
+    }
+
+    public function hasSubscriber(User $user) {
+        return $this->subscribers()->where('subscriber_id', $user->id)->exists();
+    }
 }

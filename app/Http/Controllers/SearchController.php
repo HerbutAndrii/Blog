@@ -6,6 +6,7 @@ use App\Http\Requests\SearchRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\User;
 
 class SearchController extends Controller
 {
@@ -27,10 +28,14 @@ class SearchController extends Controller
                 ->with('title', 'Searching results');
         }
 
+        if($user = User::where('name', $request->search)->first()) {
+            return redirect(route('user.show', $user));
+        }
+
         if($category = Category::where('name', $request->search)->first()) {
             return redirect(route('category.show', $category));
-        }   
-
+        }  
+        
         $request['search'] = strtolower(str_replace(' ', '_', $request->search));
 
         if($request->search[0] != '#') {
@@ -40,7 +45,7 @@ class SearchController extends Controller
         if($tag = Tag::where('name', $request->search)->first()) {
             return redirect(route('tag.show', $tag));
         }
-
+        
         return view('posts.index')->with('title', 'Nothing found');
     }
 }

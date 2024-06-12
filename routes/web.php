@@ -11,6 +11,7 @@ use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -35,7 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/posts/edit/{post}', [PostController::class, 'edit'])->name('post.edit');
     Route::put('/posts/update/{post}', [PostController::class, 'update'])->name('post.update');
     Route::delete('/posts/delete/{post}', [PostController::class, 'destroy'])->name('post.destroy');
-    Route::get('/posts/details/{post}', [PostController::class, 'show'])->name('post.show');
+    Route::get('/posts/show/{post}', [PostController::class, 'show'])->name('post.show');
     Route::post('/posts/like/{post}', [PostLikeController::class, 'like'])->name('post.like');
     Route::delete('/posts/unlike/{post}', [PostLikeController::class, 'unlike'])->name('post.unlike');
 
@@ -56,6 +57,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/users/show/{user}', [UserController::class, 'show'])->name('user.show');
 
     Route::any('/search', SearchController::class)->name('search');
+
+    Route::post('/subscribe/{user}', [SubscriptionController::class, 'subscribe'])->name('subscribe');
+    Route::post('/unsubscribe/{user}', [SubscriptionController::class, 'unsubscribe'])->name('unsubscribe');
 }); 
 
 Route::middleware(['admin', 'auth'])->prefix('admin')->name('admin.')->group(function () {

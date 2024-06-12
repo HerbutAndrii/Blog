@@ -4,7 +4,11 @@
         <img src="{{ asset('storage/avatars/' . auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}">
     </div>
     <div class="user-name">
-      <h2>{{ auth()->user()->name }}</h2>
+      <h2>
+        <a href="{{ route('user.show', auth()->user()) }}" style="text-decoration: none; color: black">
+          {{ auth()->user()->name }}
+        </a>
+      </h2>
     </div>
   </div>
   <nav class="main-menu">

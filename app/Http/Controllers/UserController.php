@@ -14,8 +14,7 @@ class UserController extends Controller
             ->orderByDesc('updated_at')
             ->paginate(6);
 
-        return view('posts.index', compact('posts', 'user'))
-            ->with('title', "Posts of $user->name");
+        return view('posts.index', compact('posts', 'user'));
     }
 
     public function destroy(User $user) {

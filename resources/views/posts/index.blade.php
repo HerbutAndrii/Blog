@@ -6,8 +6,27 @@
         <div class="user-avatar">
             <img src="{{ asset('storage/avatars/' . $user->avatar) }}" alt="avatar">
         </div>
+        <h1 style="margin-top: 5px; margin-bottom: 0px">{{ $user->name }}</h1>
+        <h3 class="subscribers">
+            <span id="subscribers">{{ $user->subscribers()->count() }}</span> subscribers
+        </h3>
+        <div class="subscription">
+            <form action="{{ route('subscribe', $user) }}" method="POST" id="subscribe" @style([
+                    'display : none' => $user->hasSubscriber(auth()->user())
+                ])>
+                @csrf
+                <button class="subscribe">Subscribe</button> 
+            </form>
+            <form action="{{ route('unsubscribe', $user) }}" method="POST" id="unsubscribe" @style([
+                    'display : none' => ! $user->hasSubscriber(auth()->user())
+                ])>
+                @csrf
+                <button class="subscribe">Unsubscribe</button> 
+            </form>
+        </div> <hr>
+    @else
+        <h1>{{ $title }}</h1> <hr>
     @endisset
-    <h1>{{ $title }}</h1> <hr>
     @isset($posts)
         <div class="blog-cards-container">
             @foreach($posts as $post)
@@ -32,4 +51,27 @@
             {{ $posts->links() }}
         @endif
     @endisset
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#subscribe, #unsubscribe').submit(function (event) {
+                event.preventDefault();
+
+                var form = $(this);
+
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function (data) {
+                        form.closest('.subscription').find('#subscribe, #unsubscribe').toggle();
+                        $('#subscribers').text(data.subscribers);
+                    },
+                    error: function (error) {
+                        console.log(error.responseText);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

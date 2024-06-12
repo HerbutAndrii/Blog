@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
+use App\Jobs\PostNotificationJob;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
@@ -63,6 +64,8 @@ class PostController extends Controller
         if($request->has('tags')) {
             $post->tags()->attach($request->tags);
         }
+
+        dispatch(new PostNotificationJob($request->user(), $post));
 
         return redirect(route('post.user.index'));
     }

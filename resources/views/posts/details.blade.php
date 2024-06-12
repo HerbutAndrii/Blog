@@ -9,7 +9,12 @@
         </a>
     </h2>
     <h3 style="text-align: center; color: #555">
-        {{ auth()->user()->id == $post->user->id ? 'You' : $post->user->name }} | {{ $date->format('M d, Y, H:i') }} | <span id="likes-count">{{ $post->likes->count() }}</span> likes
+        @if(auth()->user()->id == $post->user->id)
+            You |
+        @else
+            <a href="{{ route('user.show', $post->user) }}" style="text-decoration: none; color: #555">{{ $post->user->name }}</a> | 
+        @endif
+        {{ $date->format('M d, Y, H:i') }} | <span id="likes-count">{{ $post->likes->count() }}</span> likes
     </h3> 
     <fieldset>
         <img class="preview-details" src="{{ asset('storage/previews/' . $post->preview) }}" alt="Preview">
